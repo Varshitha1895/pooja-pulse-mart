@@ -3,7 +3,6 @@ import { useRef } from "react";
 import { ArrowRight, Truck, ShieldCheck, Zap, ChevronRight, Package } from "lucide-react";
 import hero from "@/assets/hero-pooja.jpg";
 import { products } from "@/lib/products";
-import { ProductCard } from "@/components/site/ProductCard";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -102,8 +101,10 @@ function Home() {
         </div>
         <div ref={scroller} className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x">
           {featured.map((p) => (
-            <div key={p.id} className="snap-start shrink-0 w-[210px] md:w-[240px]">
-              <ProductCard product={p} />
+            <div key={p.id} className="snap-start shrink-0 w-[210px] md:w-[240px] rounded-xl overflow-hidden border border-border bg-card">
+              <div className="aspect-square overflow-hidden bg-gradient-warm">
+                <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover hover:scale-105 transition" />
+              </div>
             </div>
           ))}
           <Link to="/products" className="snap-start shrink-0 w-[210px] md:w-[240px] rounded-xl border-2 border-dashed border-primary/40 grid place-items-center hover:bg-primary/5 transition">

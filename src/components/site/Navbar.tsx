@@ -4,6 +4,7 @@ import logo from "@/assets/logo.png";
 import { useCart } from "@/lib/cart";
 
 const links = [
+  { to: "/", label: "Home" },
   { to: "/wholesale", label: "Wholesale" },
   { to: "/retail", label: "Retail" },
   { to: "/about", label: "About" },
