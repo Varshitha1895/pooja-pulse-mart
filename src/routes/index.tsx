@@ -3,7 +3,6 @@ import { useRef } from "react";
 import { ArrowRight, Truck, ShieldCheck, Zap, ChevronRight, Package } from "lucide-react";
 import hero from "@/assets/hero-pooja.jpg";
 import { products } from "@/lib/products";
-import { ProductCard } from "@/components/site/ProductCard";
 
 export const Route = createFileRoute("/")({
   head: () => ({
