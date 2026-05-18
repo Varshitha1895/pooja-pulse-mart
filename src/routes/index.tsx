@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef } from "react";
-import { ArrowRight, Truck, ShieldCheck, Zap, Check, ChevronRight } from "lucide-react";
+import { ArrowRight, Truck, ShieldCheck, Zap, ChevronRight, Store, Package } from "lucide-react";
 import hero from "@/assets/hero-pooja.jpg";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
@@ -64,76 +64,25 @@ function Home() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Wholesale */}
-          <div className="rounded-2xl border border-border bg-card p-8 md:p-10 shadow-warm flex flex-col">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-primary/10 grid place-items-center">
-                <span className="text-display text-2xl text-primary font-bold">W</span>
-              </div>
-              <h3 className="text-display text-3xl font-semibold">Wholesale</h3>
+          <div className="rounded-2xl border border-border bg-card p-10 md:p-14 shadow-warm flex flex-col items-start">
+            <div className="h-14 w-14 rounded-full bg-primary/10 grid place-items-center">
+              <Package className="h-7 w-7 text-primary" />
             </div>
-            <p className="mt-4 text-muted-foreground">Tiered bulk pricing for temples, retailers and event organisers.</p>
-
-            <div className="mt-6 rounded-xl bg-gradient-warm border border-border overflow-hidden">
-              <div className="px-4 py-2 bg-primary/10 text-xs uppercase tracking-wider font-semibold text-primary">Tiered Pricing Example</div>
-              <table className="w-full text-sm">
-                <tbody>
-                  {[
-                    ["1 – 10 Units", "₹250 / pc"],
-                    ["11 – 50 Units", "₹210 / pc"],
-                    ["50+ Units", "₹185 / pc"],
-                  ].map(([qty, price]) => (
-                    <tr key={qty} className="border-t border-border">
-                      <td className="px-4 py-3 text-foreground/80">{qty}</td>
-                      <td className="px-4 py-3 text-right font-semibold text-primary">{price}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <ul className="mt-6 space-y-2 text-sm">
-              {["Negotiable rates on 50+ unit orders", "Dedicated account manager", "WhatsApp-based quote system"].map((t) => (
-                <li key={t} className="flex items-start gap-2"><Check className="h-4 w-4 text-accent mt-0.5" /> {t}</li>
-              ))}
-            </ul>
-
-            <Link to="/wholesale" className="mt-8 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-semibold tracking-wide hover:opacity-90 transition">
+            <h3 className="mt-5 text-display text-3xl md:text-4xl font-semibold">Wholesale</h3>
+            <p className="mt-3 text-muted-foreground text-lg">Bulk solutions for temples and retailers.</p>
+            <Link to="/wholesale" className="mt-auto pt-8 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-semibold tracking-wide hover:opacity-90 transition">
               ENTER WHOLESALE STORE <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
           {/* Retail */}
-          <div className="rounded-2xl border border-border bg-gradient-gold text-primary-foreground p-8 md:p-10 shadow-warm flex flex-col">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-white/20 grid place-items-center backdrop-blur">
-                <Zap className="h-6 w-6 fill-current" />
-              </div>
-              <h3 className="text-display text-3xl font-semibold">Retail</h3>
+          <div className="rounded-2xl border border-border bg-gradient-gold text-primary-foreground p-10 md:p-14 shadow-warm flex flex-col items-start">
+            <div className="h-14 w-14 rounded-full bg-white/20 grid place-items-center backdrop-blur">
+              <Zap className="h-7 w-7 fill-current" />
             </div>
-            <p className="mt-4 text-primary-foreground/85">Fast shopping. Next-day delivery before 6 PM. Curated for your daily aarti.</p>
-
-            <div className="mt-6 rounded-xl bg-white/15 backdrop-blur p-6">
-              <div className="flex items-center gap-3">
-                <Zap className="h-8 w-8" />
-                <div>
-                  <p className="text-2xl font-bold leading-none">Quick Delivery</p>
-                  <p className="text-sm opacity-90">Next day by 6 PM</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-3 mt-5 text-center text-xs">
-                <div className="bg-white/10 rounded-md py-3"><p className="text-2xl font-bold">500+</p>SKUs</div>
-                <div className="bg-white/10 rounded-md py-3"><p className="text-2xl font-bold">24h</p>Delivery</div>
-                <div className="bg-white/10 rounded-md py-3"><p className="text-2xl font-bold">4.9★</p>Rating</div>
-              </div>
-            </div>
-
-            <ul className="mt-6 space-y-2 text-sm">
-              {["Lightning fast checkout", "Cash & UPI accepted", "100% authentic products"].map((t) => (
-                <li key={t} className="flex items-start gap-2"><Check className="h-4 w-4 mt-0.5" /> {t}</li>
-              ))}
-            </ul>
-
-            <Link to="/retail" className="mt-8 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-foreground text-background font-semibold tracking-wide hover:opacity-90 transition">
+            <h3 className="mt-5 text-display text-3xl md:text-4xl font-semibold">Retail</h3>
+            <p className="mt-3 text-primary-foreground/90 text-lg">Quick delivery for your home pooja needs.</p>
+            <Link to="/retail" className="mt-auto pt-8 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-foreground text-background font-semibold tracking-wide hover:opacity-90 transition">
               SHOP RETAIL NOW <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
