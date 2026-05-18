@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef } from "react";
-import { ArrowRight, Truck, ShieldCheck, Zap, ChevronRight, Store, Package } from "lucide-react";
+import { ArrowRight, Truck, ShieldCheck, Zap, ChevronRight, Package } from "lucide-react";
 import hero from "@/assets/hero-pooja.jpg";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
