@@ -26,14 +26,39 @@ function Contact() {
             <p className="mt-2 text-muted-foreground">We'll reply within one business day.</p>
           </div>
         ) : (
-          <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="rounded-xl border border-border bg-card p-6 space-y-3">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setSent(true);
+            }}
+            className="rounded-xl border border-border bg-card p-6 space-y-3"
+          >
             <div className="grid sm:grid-cols-2 gap-3">
-              <input required placeholder="Name" className="px-3 py-2.5 rounded-md border border-input bg-background" />
-              <input required type="email" placeholder="Email" className="px-3 py-2.5 rounded-md border border-input bg-background" />
+              <input
+                required
+                placeholder="Name"
+                className="px-3 py-2.5 rounded-md border border-input bg-background"
+              />
+              <input
+                required
+                type="email"
+                placeholder="Email"
+                className="px-3 py-2.5 rounded-md border border-input bg-background"
+              />
             </div>
-            <input placeholder="Subject" className="w-full px-3 py-2.5 rounded-md border border-input bg-background" />
-            <textarea required rows={5} placeholder="Message" className="w-full px-3 py-2.5 rounded-md border border-input bg-background" />
-            <button className="px-6 py-3 rounded-md bg-gradient-gold text-primary-foreground font-semibold">Send Message</button>
+            <input
+              placeholder="Subject"
+              className="w-full px-3 py-2.5 rounded-md border border-input bg-background"
+            />
+            <textarea
+              required
+              rows={5}
+              placeholder="Message"
+              className="w-full px-3 py-2.5 rounded-md border border-input bg-background"
+            />
+            <button className="px-6 py-3 rounded-md bg-gradient-gold text-primary-foreground font-semibold">
+              Send Message
+            </button>
           </form>
         )}
         <aside className="space-y-4">

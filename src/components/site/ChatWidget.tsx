@@ -6,8 +6,10 @@ type Msg = { from: "bot" | "user"; text: string };
 const OPTIONS = ["Track My Order", "Wholesale Inquiry", "Talk to Human"] as const;
 
 const RESPONSES: Record<string, string> = {
-  "Track My Order": "Please share your order ID (e.g. DP-12345). Our team will share real-time status on WhatsApp.",
-  "Wholesale Inquiry": "We offer tiered bulk pricing on 50+ units. Tap below to chat on WhatsApp for a custom quote.",
+  "Track My Order":
+    "Please share your order ID (e.g. DP-12345). Our team will share real-time status on WhatsApp.",
+  "Wholesale Inquiry":
+    "We offer tiered bulk pricing on 50+ units. Tap below to chat on WhatsApp for a custom quote.",
   "Talk to Human": "Connecting you to our care team — they're available 9 AM to 8 PM, Mon–Sat.",
 };
 
@@ -20,7 +22,11 @@ export function ChatWidget() {
   ]);
 
   const handle = (option: string) => {
-    setMsgs((m) => [...m, { from: "user", text: option }, { from: "bot", text: RESPONSES[option] }]);
+    setMsgs((m) => [
+      ...m,
+      { from: "user", text: option },
+      { from: "bot", text: RESPONSES[option] },
+    ]);
   };
 
   return (
@@ -42,7 +48,9 @@ export function ChatWidget() {
           <div className="p-4 space-y-3 max-h-72 overflow-y-auto bg-background">
             {msgs.map((m, i) => (
               <div key={i} className={m.from === "bot" ? "flex" : "flex justify-end"}>
-                <div className={`max-w-[80%] px-3 py-2 rounded-lg text-sm ${m.from === "bot" ? "bg-secondary text-foreground" : "bg-accent text-accent-foreground"}`}>
+                <div
+                  className={`max-w-[80%] px-3 py-2 rounded-lg text-sm ${m.from === "bot" ? "bg-secondary text-foreground" : "bg-accent text-accent-foreground"}`}
+                >
                   {m.text}
                 </div>
               </div>

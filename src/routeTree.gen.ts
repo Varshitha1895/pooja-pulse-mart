@@ -9,17 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WholesaleCartRouteImport } from './routes/wholesale-cart'
 import { Route as WholesaleRouteImport } from './routes/wholesale'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as RetailRouteImport } from './routes/retail'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductProductIdRouteImport } from './routes/product.$productId'
 
+const WholesaleCartRoute = WholesaleCartRouteImport.update({
+  id: '/wholesale-cart',
+  path: '/wholesale-cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WholesaleRoute = WholesaleRouteImport.update({
   id: '/wholesale',
   path: '/wholesale',
@@ -35,6 +44,11 @@ const RetailRoute = RetailRouteImport.update({
   path: '/retail',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
@@ -43,6 +57,11 @@ const ProductsRoute = ProductsRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -70,6 +89,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductProductIdRoute = ProductProductIdRouteImport.update({
+  id: '/product/$productId',
+  path: '/product/$productId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -77,11 +101,15 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
+  '/profile': typeof ProfileRoute
   '/retail': typeof RetailRoute
   '/terms': typeof TermsRoute
   '/wholesale': typeof WholesaleRoute
+  '/wholesale-cart': typeof WholesaleCartRoute
+  '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -89,11 +117,15 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
+  '/profile': typeof ProfileRoute
   '/retail': typeof RetailRoute
   '/terms': typeof TermsRoute
   '/wholesale': typeof WholesaleRoute
+  '/wholesale-cart': typeof WholesaleCartRoute
+  '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -102,11 +134,15 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
+  '/profile': typeof ProfileRoute
   '/retail': typeof RetailRoute
   '/terms': typeof TermsRoute
   '/wholesale': typeof WholesaleRoute
+  '/wholesale-cart': typeof WholesaleCartRoute
+  '/product/$productId': typeof ProductProductIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,11 +152,15 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/login'
     | '/privacy'
     | '/products'
+    | '/profile'
     | '/retail'
     | '/terms'
     | '/wholesale'
+    | '/wholesale-cart'
+    | '/product/$productId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,11 +168,15 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/login'
     | '/privacy'
     | '/products'
+    | '/profile'
     | '/retail'
     | '/terms'
     | '/wholesale'
+    | '/wholesale-cart'
+    | '/product/$productId'
   id:
     | '__root__'
     | '/'
@@ -140,11 +184,15 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/login'
     | '/privacy'
     | '/products'
+    | '/profile'
     | '/retail'
     | '/terms'
     | '/wholesale'
+    | '/wholesale-cart'
+    | '/product/$productId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -153,15 +201,26 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
+  LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   ProductsRoute: typeof ProductsRoute
+  ProfileRoute: typeof ProfileRoute
   RetailRoute: typeof RetailRoute
   TermsRoute: typeof TermsRoute
   WholesaleRoute: typeof WholesaleRoute
+  WholesaleCartRoute: typeof WholesaleCartRoute
+  ProductProductIdRoute: typeof ProductProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wholesale-cart': {
+      id: '/wholesale-cart'
+      path: '/wholesale-cart'
+      fullPath: '/wholesale-cart'
+      preLoaderRoute: typeof WholesaleCartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wholesale': {
       id: '/wholesale'
       path: '/wholesale'
@@ -183,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RetailRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products': {
       id: '/products'
       path: '/products'
@@ -195,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -232,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/product/$productId': {
+      id: '/product/$productId'
+      path: '/product/$productId'
+      fullPath: '/product/$productId'
+      preLoaderRoute: typeof ProductProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -241,12 +321,26 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
+  LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   ProductsRoute: ProductsRoute,
+  ProfileRoute: ProfileRoute,
   RetailRoute: RetailRoute,
   TermsRoute: TermsRoute,
   WholesaleRoute: WholesaleRoute,
+  WholesaleCartRoute: WholesaleCartRoute,
+  ProductProductIdRoute: ProductProductIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

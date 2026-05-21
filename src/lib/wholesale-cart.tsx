@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { products, type Product } from "./products";
 
 type CartItem = { product: Product; qty: number };
-type CartCtx = {
+type WholesaleCartCtx = {
   items: CartItem[];
   add: (id: string) => void;
   remove: (id: string) => void;
@@ -12,15 +12,15 @@ type CartCtx = {
   total: number;
 };
 
-const Ctx = createContext<CartCtx | null>(null);
+const WholesaleCtx = createContext<WholesaleCartCtx | null>(null);
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function WholesaleCartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
-      const raw = localStorage.getItem("dp-cart");
+      const raw = localStorage.getItem("dp-wholesale-cart");
       if (raw) {
         const parsed: { id: string; qty: number }[] = JSON.parse(raw);
         const hydrated = parsed
@@ -39,7 +39,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     localStorage.setItem(
-      "dp-cart",
+      "dp-wholesale-cart",
       JSON.stringify(items.map((i) => ({ id: i.product.id, qty: i.qty }))),
     );
   }, [items]);
@@ -63,17 +63,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clear = () => setItems([]);
 
   const count = items.reduce((s, i) => s + i.qty, 0);
-  const total = items.reduce((s, i) => s + i.qty * i.product.price, 0);
+  const total = items.reduce((s, i) => s + i.qty * i.product.price, 0); // Bulk pricing can be applied here later if needed
 
   return (
-    <Ctx.Provider value={{ items, add, remove, setQty, clear, count, total }}>
+    <WholesaleCtx.Provider value={{ items, add, remove, setQty, clear, count, total }}>
       {children}
-    </Ctx.Provider>
+    </WholesaleCtx.Provider>
   );
 }
 
-export function useCart() {
-  const c = useContext(Ctx);
-  if (!c) throw new Error("useCart must be used within CartProvider");
+export function useWholesaleCart() {
+  const c = useContext(WholesaleCtx);
+  if (!c) throw new Error("useWholesaleCart must be used within WholesaleCartProvider");
   return c;
 }
