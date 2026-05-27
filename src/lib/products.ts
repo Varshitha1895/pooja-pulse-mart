@@ -1,8 +1,3 @@
-import agarbathi from "@/assets/prod-agarbathi.jpg";
-import diya from "@/assets/prod-diya.jpg";
-import camphor from "@/assets/prod-camphor.jpg";
-import chandan from "@/assets/prod-chandan.jpg";
-
 export type Product = {
   id: string;
   name: string;
@@ -11,217 +6,354 @@ export type Product = {
   image: string;
   unit?: string;
   catalog: 'retail' | 'wholesale' | 'both';
+  description?: string;
 };
 
-const imgs = [agarbathi, diya, camphor, chandan];
+// You can replace these image links with your own specific image URLs!
+const seed: Omit<Product, "id">[] = [
+  // ----------------------------------------------------
+  // RETAIL ITEMS (4 Items)
+  // ----------------------------------------------------
+  // card 1
+  { 
+    name: "Premium Sandal Agarbathi", 
+    category: "Pasupu Kumkum packets", 
+    price: 4, 
+    unit: "pack", 
+    catalog: "retail",
+    // 👇 I have changed this link to a new image as an example!
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779878825/Gemini_Generated_Image_1s2ihz1s2ihz1s2i_u9ano5.png",
+    description: "Sustainably sourced, pure ingredients perfect for daily rituals."
+  },
+  // card 2
+  { 
+    name: "Gopuram Termaric Powder Packet", 
+    category: "Pasupu", 
+    price: 280, 
+    unit: "piece", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779878518/Gemini_Generated_Image_xb7qymxb7qymxb7q_uposhw.png",
+    description: "Crafted by traditional artisans to elevate your spiritual space."
+  },
+  // card 3
+  { 
+    name: "Gandham ", 
+    category: "Gandam powder", 
+    price: 95, 
+    unit: "jar", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779874454/Gemini_Generated_Image_3k68843k68843k68_wrqjwn.png",
+    description: "Long-lasting burn time with zero harmful chemicals."
+  },
+    // card 4
+  { 
+    name: "KARPURAM ", 
+    category: "Karpuram", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779876874/Camphor_tablets_rogwv7.jpg",
+    description: "Pure and authentic karpuram and pooja."
+  }, // card 5
+   { 
+    name: "Triveni sweet supari ", 
+    category: "Sweet supari", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779878134/Gemini_Generated_Image_cgux6pcgux6pcgux_zd1yzv.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
 
-const seed: Omit<Product, "id" | "image">[] = [
-  { name: "Premium Ganga Jal 1", category: "Liquids", price: 490, unit: "piece", catalog: "retail" },
-  { name: "Premium Tilak 2", category: "Tilak", price: 95, unit: "bottle", catalog: "retail" },
-  { name: "Premium Mala 3", category: "Accessories", price: 665, unit: "piece", catalog: "retail" },
-  { name: "Premium Sandalwood Paste 4", category: "Pastes", price: 958, unit: "bottle", catalog: "retail" },
-  { name: "Premium Camphor 5", category: "Camphor", price: 210, unit: "jar", catalog: "retail" },
-  { name: "Premium Dhoop 6", category: "Dhoop", price: 654, unit: "piece", catalog: "retail" },
-  { name: "Premium Incense Cones 7", category: "Dhoop", price: 417, unit: "pack", catalog: "retail" },
-  { name: "Premium Rose Water 8", category: "Liquids", price: 543, unit: "box", catalog: "retail" },
-  { name: "Premium Mala 9", category: "Accessories", price: 735, unit: "bottle", catalog: "retail" },
-  { name: "Premium Agarbathi 10", category: "Agarbathi", price: 907, unit: "bottle", catalog: "retail" },
-  { name: "Premium Brass Thali 11", category: "Accessories", price: 538, unit: "pack", catalog: "retail" },
-  { name: "Premium Incense Cones 12", category: "Dhoop", price: 770, unit: "jar", catalog: "retail" },
-  { name: "Premium Diya 13", category: "Diyas & Lamps", price: 904, unit: "bottle", catalog: "retail" },
-  { name: "Premium Ganga Jal 14", category: "Liquids", price: 949, unit: "bottle", catalog: "retail" },
-  { name: "Premium Diya 15", category: "Diyas & Lamps", price: 143, unit: "bottle", catalog: "retail" },
-  { name: "Premium Wicks 16", category: "Wicks", price: 600, unit: "bottle", catalog: "retail" },
-  { name: "Premium Incense Cones 17", category: "Dhoop", price: 283, unit: "piece", catalog: "retail" },
-  { name: "Premium Ganga Jal 18", category: "Liquids", price: 878, unit: "piece", catalog: "retail" },
-  { name: "Premium Idol 19", category: "Idols", price: 575, unit: "pack", catalog: "retail" },
-  { name: "Premium Chandan 20", category: "Powders", price: 189, unit: "pack", catalog: "retail" },
-  { name: "Premium Brass Thali 21", category: "Accessories", price: 192, unit: "box", catalog: "retail" },
-  { name: "Premium Agarbathi 22", category: "Agarbathi", price: 93, unit: "bottle", catalog: "retail" },
-  { name: "Premium Brass Thali 23", category: "Accessories", price: 835, unit: "pack", catalog: "retail" },
-  { name: "Premium Chandan 24", category: "Powders", price: 998, unit: "jar", catalog: "retail" },
-  { name: "Premium Mala 25", category: "Accessories", price: 342, unit: "bottle", catalog: "retail" },
-  { name: "Premium Pooja Bell 26", category: "Accessories", price: 777, unit: "piece", catalog: "retail" },
-  { name: "Premium Ganga Jal 27", category: "Liquids", price: 523, unit: "piece", catalog: "retail" },
-  { name: "Premium Diya 28", category: "Diyas & Lamps", price: 983, unit: "box", catalog: "retail" },
-  { name: "Premium Tilak 29", category: "Tilak", price: 838, unit: "bottle", catalog: "retail" },
-  { name: "Premium Mala 30", category: "Accessories", price: 639, unit: "jar", catalog: "retail" },
-  { name: "Premium Kumkum 31", category: "Powders", price: 501, unit: "bottle", catalog: "retail" },
-  { name: "Premium Agarbathi 32", category: "Agarbathi", price: 521, unit: "pack", catalog: "retail" },
-  { name: "Premium Kumkum 33", category: "Powders", price: 429, unit: "piece", catalog: "retail" },
-  { name: "Premium Chandan 34", category: "Powders", price: 485, unit: "pack", catalog: "retail" },
-  { name: "Premium Chandan 35", category: "Powders", price: 116, unit: "box", catalog: "retail" },
-  { name: "Premium Kumkum 36", category: "Powders", price: 636, unit: "jar", catalog: "retail" },
-  { name: "Premium Tilak 37", category: "Tilak", price: 323, unit: "box", catalog: "retail" },
-  { name: "Premium Brass Thali 38", category: "Accessories", price: 398, unit: "pack", catalog: "retail" },
-  { name: "Premium Kumkum 39", category: "Powders", price: 619, unit: "box", catalog: "retail" },
-  { name: "Premium Mala 40", category: "Accessories", price: 224, unit: "pack", catalog: "retail" },
-  { name: "Premium Pooja Bell 41", category: "Accessories", price: 905, unit: "jar", catalog: "retail" },
-  { name: "Premium Dhoop 42", category: "Dhoop", price: 667, unit: "bottle", catalog: "retail" },
-  { name: "Premium Agarbathi 43", category: "Agarbathi", price: 950, unit: "box", catalog: "retail" },
-  { name: "Premium Brass Thali 44", category: "Accessories", price: 805, unit: "bottle", catalog: "retail" },
-  { name: "Premium Camphor 45", category: "Camphor", price: 154, unit: "jar", catalog: "retail" },
-  { name: "Premium Ganga Jal 46", category: "Liquids", price: 466, unit: "piece", catalog: "retail" },
-  { name: "Premium Dhoop 47", category: "Dhoop", price: 131, unit: "piece", catalog: "retail" },
-  { name: "Premium Camphor 48", category: "Camphor", price: 329, unit: "pack", catalog: "retail" },
-  { name: "Premium Chandan 49", category: "Powders", price: 147, unit: "pack", catalog: "retail" },
-  { name: "Premium Agarbathi 50", category: "Agarbathi", price: 776, unit: "pack", catalog: "retail" },
-  { name: "Premium Pooja Bell 51", category: "Accessories", price: 57, unit: "jar", catalog: "retail" },
-  { name: "Premium Sandalwood Paste 52", category: "Pastes", price: 660, unit: "box", catalog: "retail" },
-  { name: "Premium Sandalwood Paste 53", category: "Pastes", price: 958, unit: "bottle", catalog: "retail" },
-  { name: "Premium Ganga Jal 54", category: "Liquids", price: 151, unit: "pack", catalog: "retail" },
-  { name: "Premium Dhoop 55", category: "Dhoop", price: 351, unit: "pack", catalog: "retail" },
-  { name: "Premium Rose Water 56", category: "Liquids", price: 91, unit: "box", catalog: "retail" },
-  { name: "Premium Pooja Bell 57", category: "Accessories", price: 184, unit: "pack", catalog: "retail" },
-  { name: "Premium Kumkum 58", category: "Powders", price: 499, unit: "bottle", catalog: "retail" },
-  { name: "Premium Rose Water 59", category: "Liquids", price: 579, unit: "jar", catalog: "retail" },
-  { name: "Premium Ganga Jal 60", category: "Liquids", price: 512, unit: "box", catalog: "retail" },
-  { name: "Premium Incense Cones 61", category: "Dhoop", price: 864, unit: "pack", catalog: "retail" },
-  { name: "Premium Diya 62", category: "Diyas & Lamps", price: 799, unit: "bottle", catalog: "retail" },
-  { name: "Premium Brass Thali 63", category: "Accessories", price: 787, unit: "bottle", catalog: "retail" },
-  { name: "Premium Tilak 64", category: "Tilak", price: 509, unit: "jar", catalog: "retail" },
-  { name: "Premium Chandan 65", category: "Powders", price: 723, unit: "bottle", catalog: "retail" },
-  { name: "Premium Mala 66", category: "Accessories", price: 779, unit: "jar", catalog: "retail" },
-  { name: "Premium Chandan 67", category: "Powders", price: 476, unit: "box", catalog: "retail" },
-  { name: "Premium Rose Water 68", category: "Liquids", price: 679, unit: "pack", catalog: "retail" },
-  { name: "Premium Camphor 69", category: "Camphor", price: 919, unit: "piece", catalog: "retail" },
-  { name: "Premium Mala 70", category: "Accessories", price: 222, unit: "piece", catalog: "retail" },
-  { name: "Premium Wicks 71", category: "Wicks", price: 515, unit: "pack", catalog: "retail" },
-  { name: "Premium Tilak 72", category: "Tilak", price: 541, unit: "box", catalog: "retail" },
-  { name: "Premium Camphor 73", category: "Camphor", price: 761, unit: "jar", catalog: "retail" },
-  { name: "Premium Diya 74", category: "Diyas & Lamps", price: 383, unit: "bottle", catalog: "retail" },
-  { name: "Premium Camphor 75", category: "Camphor", price: 954, unit: "bottle", catalog: "retail" },
-  { name: "Premium Camphor 76", category: "Camphor", price: 255, unit: "bottle", catalog: "retail" },
-  { name: "Premium Kumkum 77", category: "Powders", price: 609, unit: "jar", catalog: "retail" },
-  { name: "Premium Tilak 78", category: "Tilak", price: 491, unit: "box", catalog: "retail" },
-  { name: "Premium Rose Water 79", category: "Liquids", price: 609, unit: "bottle", catalog: "retail" },
-  { name: "Premium Ganga Jal 80", category: "Liquids", price: 616, unit: "bottle", catalog: "retail" },
-  { name: "Premium Incense Cones 81", category: "Dhoop", price: 515, unit: "jar", catalog: "retail" },
-  { name: "Premium Mala 82", category: "Accessories", price: 593, unit: "pack", catalog: "retail" },
-  { name: "Premium Idol 83", category: "Idols", price: 428, unit: "piece", catalog: "retail" },
-  { name: "Premium Sandalwood Paste 84", category: "Pastes", price: 248, unit: "bottle", catalog: "retail" },
-  { name: "Premium Incense Cones 85", category: "Dhoop", price: 850, unit: "piece", catalog: "retail" },
-  { name: "Premium Ganga Jal 86", category: "Liquids", price: 196, unit: "bottle", catalog: "retail" },
-  { name: "Premium Tilak 87", category: "Tilak", price: 834, unit: "box", catalog: "retail" },
-  { name: "Premium Ganga Jal 88", category: "Liquids", price: 938, unit: "piece", catalog: "retail" },
-  { name: "Premium Tilak 89", category: "Tilak", price: 139, unit: "jar", catalog: "retail" },
-  { name: "Premium Chandan 90", category: "Powders", price: 762, unit: "pack", catalog: "retail" },
-  { name: "Premium Agarbathi 91", category: "Agarbathi", price: 797, unit: "bottle", catalog: "retail" },
-  { name: "Premium Chandan 92", category: "Powders", price: 863, unit: "piece", catalog: "retail" },
-  { name: "Premium Chandan 93", category: "Powders", price: 871, unit: "piece", catalog: "retail" },
-  { name: "Premium Brass Thali 94", category: "Accessories", price: 921, unit: "box", catalog: "retail" },
-  { name: "Premium Ganga Jal 95", category: "Liquids", price: 999, unit: "bottle", catalog: "retail" },
-  { name: "Premium Kumkum 96", category: "Powders", price: 460, unit: "piece", catalog: "retail" },
-  { name: "Premium Ganga Jal 97", category: "Liquids", price: 59, unit: "piece", catalog: "retail" },
-  { name: "Premium Idol 98", category: "Idols", price: 783, unit: "box", catalog: "retail" },
-  { name: "Premium Idol 99", category: "Idols", price: 564, unit: "box", catalog: "retail" },
-  { name: "Premium Chandan 100", category: "Powders", price: 622, unit: "jar", catalog: "retail" },
-  { name: "Bulk Chandan Pack 1", category: "Powders", price: 33788, unit: "pallet", catalog: "wholesale" },
-  { name: "Master Carton Dhoop Pack 2", category: "Dhoop", price: 9427, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Incense Pack 3", category: "Dhoop", price: 46526, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 4", category: "Accessories", price: 40574, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Diyas Pack 5", category: "Diyas & Lamps", price: 23614, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Malas Pack 6", category: "Accessories", price: 5290, unit: "crate", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 7", category: "Camphor", price: 23918, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Pooja Bells Pack 8", category: "Accessories", price: 13625, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 9", category: "Accessories", price: 11914, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Malas Pack 10", category: "Accessories", price: 7529, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 11", category: "Accessories", price: 32710, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Sandalwood Pack 12", category: "Pastes", price: 14556, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Diyas Pack 13", category: "Diyas & Lamps", price: 46570, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 14", category: "Agarbathi", price: 10851, unit: "pallet", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 15", category: "Camphor", price: 45834, unit: "jar", catalog: "wholesale" },
-  { name: "Bulk Diyas Pack 16", category: "Diyas & Lamps", price: 16114, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Tilak Pack 17", category: "Tilak", price: 28937, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Pooja Bells Pack 18", category: "Accessories", price: 20600, unit: "box", catalog: "wholesale" },
-  { name: "Bulk Sandalwood Pack 19", category: "Pastes", price: 18782, unit: "jar", catalog: "wholesale" },
-  { name: "Bulk Sandalwood Pack 20", category: "Pastes", price: 34911, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Diyas Pack 21", category: "Diyas & Lamps", price: 30662, unit: "sack", catalog: "wholesale" },
-  { name: "Master Carton Dhoop Pack 22", category: "Dhoop", price: 7215, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Ganga Jal Pack 23", category: "Liquids", price: 47606, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Tilak Pack 24", category: "Tilak", price: 26279, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Ganga Jal Pack 25", category: "Liquids", price: 30444, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 26", category: "Liquids", price: 4704, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Incense Pack 27", category: "Dhoop", price: 18597, unit: "crate", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 28", category: "Camphor", price: 43029, unit: "crate", catalog: "wholesale" },
-  { name: "Bulk Chandan Pack 29", category: "Powders", price: 16724, unit: "crate", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 30", category: "Agarbathi", price: 7462, unit: "crate", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 31", category: "Camphor", price: 43863, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Wicks Pack 32", category: "Wicks", price: 26415, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Wicks Pack 33", category: "Wicks", price: 25908, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 34", category: "Liquids", price: 23899, unit: "jar", catalog: "wholesale" },
-  { name: "Wholesale Ganga Jal Pack 35", category: "Liquids", price: 34588, unit: "crate", catalog: "wholesale" },
-  { name: "Bulk Sandalwood Pack 36", category: "Pastes", price: 28926, unit: "box", catalog: "wholesale" },
-  { name: "Bulk Chandan Pack 37", category: "Powders", price: 7025, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Incense Pack 38", category: "Dhoop", price: 38123, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Tilak Pack 39", category: "Tilak", price: 29233, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Idols Pack 40", category: "Idols", price: 23094, unit: "jar", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 41", category: "Camphor", price: 20657, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Pooja Bells Pack 42", category: "Accessories", price: 6212, unit: "box", catalog: "wholesale" },
-  { name: "Bulk Sandalwood Pack 43", category: "Pastes", price: 3221, unit: "crate", catalog: "wholesale" },
-  { name: "Bulk Chandan Pack 44", category: "Powders", price: 23394, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 45", category: "Agarbathi", price: 49947, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 46", category: "Liquids", price: 9375, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 47", category: "Accessories", price: 35933, unit: "sack", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 48", category: "Agarbathi", price: 49798, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Tilak Pack 49", category: "Tilak", price: 15877, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Pooja Bells Pack 50", category: "Accessories", price: 31849, unit: "pallet", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 51", category: "Agarbathi", price: 34553, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Wicks Pack 52", category: "Wicks", price: 34352, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Idols Pack 53", category: "Idols", price: 45062, unit: "jar", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 54", category: "Agarbathi", price: 12102, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 55", category: "Accessories", price: 32849, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Tilak Pack 56", category: "Tilak", price: 6691, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Kumkum Pack 57", category: "Powders", price: 29738, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Wicks Pack 58", category: "Wicks", price: 12149, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 59", category: "Liquids", price: 5530, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Sandalwood Pack 60", category: "Pastes", price: 39178, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 61", category: "Liquids", price: 2314, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 62", category: "Accessories", price: 43309, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Malas Pack 63", category: "Accessories", price: 23280, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Wicks Pack 64", category: "Wicks", price: 31434, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Wicks Pack 65", category: "Wicks", price: 20469, unit: "jar", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 66", category: "Camphor", price: 29266, unit: "jar", catalog: "wholesale" },
-  { name: "Wholesale Kumkum Pack 67", category: "Powders", price: 43239, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Malas Pack 68", category: "Accessories", price: 4630, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 69", category: "Camphor", price: 38313, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 70", category: "Accessories", price: 46369, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Pooja Bells Pack 71", category: "Accessories", price: 29871, unit: "sack", catalog: "wholesale" },
-  { name: "Bulk Diyas Pack 72", category: "Diyas & Lamps", price: 24570, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Idols Pack 73", category: "Idols", price: 4175, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 74", category: "Liquids", price: 3438, unit: "jar", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 75", category: "Liquids", price: 39516, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Sandalwood Pack 76", category: "Pastes", price: 47502, unit: "carton", catalog: "wholesale" },
-  { name: "Master Carton Dhoop Pack 77", category: "Dhoop", price: 45048, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Tilak Pack 78", category: "Tilak", price: 31079, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 79", category: "Liquids", price: 6596, unit: "box", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 80", category: "Camphor", price: 22525, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 81", category: "Liquids", price: 20786, unit: "jar", catalog: "wholesale" },
-  { name: "Wholesale Idols Pack 82", category: "Idols", price: 11609, unit: "box", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 83", category: "Agarbathi", price: 10755, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Idols Pack 84", category: "Idols", price: 45871, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Tilak Pack 85", category: "Tilak", price: 24837, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 86", category: "Accessories", price: 11522, unit: "crate", catalog: "wholesale" },
-  { name: "Wholesale Ganga Jal Pack 87", category: "Liquids", price: 41019, unit: "box", catalog: "wholesale" },
-  { name: "Wholesale Idols Pack 88", category: "Idols", price: 34445, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 89", category: "Agarbathi", price: 25784, unit: "carton", catalog: "wholesale" },
-  { name: "Bulk Camphor Pack 90", category: "Camphor", price: 24137, unit: "crate", catalog: "wholesale" },
-  { name: "Master Carton Dhoop Pack 91", category: "Dhoop", price: 26855, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Ganga Jal Pack 92", category: "Liquids", price: 37826, unit: "jar", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 93", category: "Agarbathi", price: 8255, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Rose Water Pack 94", category: "Liquids", price: 45068, unit: "carton", catalog: "wholesale" },
-  { name: "Wholesale Incense Pack 95", category: "Dhoop", price: 21981, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Brass Thalis Pack 96", category: "Accessories", price: 14373, unit: "jar", catalog: "wholesale" },
-  { name: "Wholesale Incense Pack 97", category: "Dhoop", price: 37575, unit: "pallet", catalog: "wholesale" },
-  { name: "Wholesale Tilak Pack 98", category: "Tilak", price: 9901, unit: "crate", catalog: "wholesale" },
-  { name: "Bulk Agarbathi Pack 99", category: "Agarbathi", price: 17956, unit: "sack", catalog: "wholesale" },
-  { name: "Wholesale Incense Pack 100", category: "Dhoop", price: 10963, unit: "crate", catalog: "wholesale" },
+
+ // card 6
+   { 
+    name: "GATTI VOTHULU ", 
+    category: "VOTHULU", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779877937/www_divyadarshnam_ljtoqq.jpg",
+    description: "Pure and authentic karpuram and pooja."
+  },
+  
+
+   // card 7
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779878689/Gemini_Generated_Image_kiw8mrkiw8mrkiw8_vmiv6w.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+
+  // card 8
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779879839/Gemini_Generated_Image_2ktd4x2ktd4x2ktd_kulxzf.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+  // card 9
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779879856/Gemini_Generated_Image_29fxte29fxte29fx_ymhwqz.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+  // card 10
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779880203/Gemini_Generated_Image_q9vtnxq9vtnxq9vt_bybyuw.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+  // card 11
+    { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779880656/Gemini_Generated_Image_otvjsbotvjsbotvj_ffi7jc.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+  
+  // card 12
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779880925/Gemini_Generated_Image_xxsef7xxsef7xxse_vfxlie.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+
+  // card 13
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 14
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+ // card 15
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 16
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 17
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 18
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 19
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 20
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 21
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 22
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 23
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 24
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+   // card 25
+   { 
+    name: "KUNKUMA ", 
+    category: "Kunkum", 
+    price: 150, 
+    unit: "pack", 
+    catalog: "retail",
+    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779881114/Gemini_Generated_Image_nu2ryunu2ryunu2r_zavfce.png",
+    description: "Pure and authentic karpuram and pooja."
+  },
+ 
+
+  // ----------------------------------------------------
+  // WHOLESALE ITEMS (4 Items)
+  // ----------------------------------------------------
+  { 
+    name: "Wholesale Agarbathi Carton", 
+    category: "Agarbathi", 
+    price: 45000, 
+    unit: "carton", 
+    catalog: "wholesale",
+    image: "https://images.unsplash.com/photo-1593344605934-2e997576435c?auto=format&fit=crop&q=80&w=800",
+    description: "Bulk carton containing 500 packs of premium agarbathi for temples and stores."
+  },
+  { 
+    name: "Bulk Brass Diyas (100 pcs)", 
+    category: "Diyas & Lamps", 
+    price: 22000, 
+    unit: "box", 
+    catalog: "wholesale",
+    image: "https://images.unsplash.com/photo-1615370217992-628d227c2f1e?auto=format&fit=crop&q=80&w=800",
+    description: "Wholesale box of classic brass diyas, heavily discounted for bulk purchase."
+  },
+  { 
+    name: "Camphor Bulk Jar 5kg", 
+    category: "Camphor", 
+    price: 7500, 
+    unit: "jar", 
+    catalog: "wholesale",
+    image: "https://images.unsplash.com/photo-1563298723-dcfebaa392e3?auto=format&fit=crop&q=80&w=800",
+    description: "5kg industrial jar of pure camphor cubes. Ideal for large ceremonies."
+  },
+  { 
+    name: "Chandan Powder Bulk 10kg", 
+    category: "Powders", 
+    price: 12000, 
+    unit: "sack", 
+    catalog: "wholesale",
+    image: "https://images.unsplash.com/photo-1588616156976-12fbd7f99955?auto=format&fit=crop&q=80&w=800",
+    description: "10kg sack of pure Chandan powder directly from suppliers."
+  },
+  { 
+    name: "Wholesale Kumkum Bulk 10kg", 
+    category: "Powders", 
+    price: 8500, 
+    unit: "sack", 
+    catalog: "wholesale",
+    image: "https://images.unsplash.com/photo-1605807646983-377bc5a76493?auto=format&fit=crop&q=80&w=800",
+    description: "Vibrant red kumkum for temples and large pooja gatherings."
+  },
+  { 
+    name: "Pure Ghee Wicks Master Carton", 
+    category: "Wicks", 
+    price: 35000, 
+    unit: "carton", 
+    catalog: "wholesale",
+    image: "https://images.unsplash.com/photo-1596433809252-260c2666113b?auto=format&fit=crop&q=80&w=800",
+    description: "Master carton containing 10,000 pure ghee wicks for daily aarti."
+  },
+  { 
+    name: "Loban Sambrani Cups Wholesale", 
+    category: "Dhoop", 
+    price: 18000, 
+    unit: "pallet", 
+    catalog: "wholesale",
+    image: "https://images.unsplash.com/photo-1611077544795-3bc6e088c2e4?auto=format&fit=crop&q=80&w=800",
+    description: "Wholesale pallet of loban sambrani cups for deep cleansing aromas."
+  },
+  { 
+    name: "Silver Plated Pooja Thali Sets", 
+    category: "Accessories", 
+    price: 45000, 
+    unit: "crate", 
+    catalog: "wholesale",
+    image: "https://images.unsplash.com/photo-1615370217992-628d227c2f1e?auto=format&fit=crop&q=80&w=800",
+    description: "Crate of 20 silver-plated pooja thalis for retail resale or large gifting."
+  },
 ];
 
+// Add an ID to each product based on its index
 export const products: Product[] = seed.map((p, i) => ({
   ...p,
   id: `p-${i + 1}`,
-  image: imgs[i % imgs.length],
 }));
 
 export const retailProducts = products.filter((p) => p.catalog === 'retail' || p.catalog === 'both');
