@@ -4,7 +4,7 @@ import { ArrowRight, Truck, ShieldCheck, Zap, ChevronRight, Package } from "luci
 import hero from "@/assets/hero-pooja.jpg";
 import muralBgRealistic from "@/assets/rama-sita-realistic.png";
 import { DivinePetals } from "@/components/site/DivinePetals";
-import { products } from "@/lib/products";
+import { retailProducts as products } from "@/lib/retail-products";
 
 export const Route = createFileRoute("/")({
   head: () => ({

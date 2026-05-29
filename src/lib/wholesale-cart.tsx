@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { products, type Product } from "./products";
+import { wholesaleProducts as products } from "./wholesale-products";
+import type { Product } from "./types";
 
 type CartItem = { product: Product; qty: number };
 type WholesaleCartCtx = {

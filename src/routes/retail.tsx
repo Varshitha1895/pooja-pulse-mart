@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { retailProducts as products, categories } from "@/lib/products";
+import { retailProducts as products, categories } from "@/lib/retail-products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart } from "@/lib/cart";
 import { Zap, ShoppingBag } from "lucide-react";
@@ -56,7 +56,7 @@ function Retail() {
           </div>
         </aside>
         <section>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
             {list.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}

@@ -48,24 +48,39 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <Link
-            to={user ? "/profile" : "/login"}
-            className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-colors ${
-              user 
-                ? 'bg-primary/10 text-primary hover:bg-primary/20' 
-                : 'bg-primary text-primary-foreground hover:opacity-90'
-            }`}
-          >
-            <User className="h-4 w-4" />
-            {user ? "Profile" : "Login"}
-          </Link>
-          <Link
-            to={user ? "/profile" : "/login"}
-            aria-label="Account"
-            className={`sm:hidden h-10 w-10 grid place-items-center rounded-full transition ${user ? 'bg-primary/10 text-primary' : 'hover:bg-secondary text-foreground/80'}`}
-          >
-            <User className="h-5 w-5" />
-          </Link>
+          {user ? (
+            <Link
+              to="/profile"
+              aria-label="Profile"
+              title="Your Profile"
+              className="h-10 w-10 flex items-center justify-center rounded-full transition bg-primary/10 hover:bg-primary/20 ring-1 ring-primary/30 hover:ring-primary/60 overflow-hidden shrink-0"
+            >
+              {user.avatar_url ? (
+                <img src={user.avatar_url} alt={user.name} className="h-full w-full object-cover" />
+              ) : (
+                <span className="text-primary font-bold text-lg">
+                  {user.name.charAt(0).toUpperCase()}
+                </span>
+              )}
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-colors bg-primary text-primary-foreground hover:opacity-90"
+              >
+                <User className="h-4 w-4" />
+                Login
+              </Link>
+              <Link
+                to="/login"
+                aria-label="Login"
+                className="sm:hidden h-10 w-10 grid place-items-center rounded-full hover:bg-secondary text-foreground/80 transition"
+              >
+                <User className="h-5 w-5" />
+              </Link>
+            </>
+          )}
           <div className="flex items-center gap-1">
             <Link
               to="/cart"

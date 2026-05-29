@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { wholesaleProducts as products } from "@/lib/products";
+import { wholesaleProducts as products } from "@/lib/wholesale-products";
 import { Package } from "lucide-react";
 import { useWholesaleCart } from "@/lib/wholesale-cart";
 
@@ -43,7 +43,7 @@ function Wholesale() {
         <h2 className="text-display text-2xl font-semibold">Catalog</h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
         {products.map((p) => (
           <div
             key={p.id}
@@ -57,11 +57,7 @@ function Wholesale() {
                 className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
               />
             </div>
-            <div className="p-5 flex-1 flex flex-col">
-              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                {p.category}
-              </p>
-              <h3 className="mt-1 text-lg font-semibold leading-snug flex-1">{p.name}</h3>
+            <div className="p-5 flex-1 flex flex-col justify-end">
               <Link
                 to={`/product/$productId`}
                 params={{ productId: p.id }}

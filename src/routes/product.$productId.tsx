@@ -1,5 +1,7 @@
 import { createFileRoute, Link, useParams, useSearch } from "@tanstack/react-router";
-import { products } from "@/lib/products";
+import { retailProducts } from "@/lib/retail-products";
+import { wholesaleProducts } from "@/lib/wholesale-products";
+const products = [...retailProducts, ...wholesaleProducts];
 import { useCart } from "@/lib/cart";
 import { useWholesaleCart } from "@/lib/wholesale-cart";
 import { ShoppingBag, Package, Star, MessageCircle, ChevronRight, Check } from "lucide-react";
@@ -137,23 +139,12 @@ function ProductDetails() {
               </div>
             )}
 
-            {/* Pooja Specific Highlights */}
+            {/* Product Description */}
             <div className={`bg-muted/30 rounded-xl p-5 mb-6 border border-border ${isWholesale ? 'mt-6 pt-6' : ''}`}>
-              <h3 className="text-sm font-bold text-foreground mb-3">Divine Highlights</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                  <span>Sustainably sourced, pure ingredients perfect for daily rituals.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                  <span>Long-lasting burn time with zero harmful chemicals.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                  <span>Crafted by traditional artisans to elevate your spiritual space.</span>
-                </li>
-              </ul>
+              <h3 className="text-sm font-bold text-foreground mb-3">Description</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {product.description || "Premium divine item for your daily rituals."}
+              </p>
             </div>
 
             {/* Wholesale Action - Only show if in retail mode to upsell */}
