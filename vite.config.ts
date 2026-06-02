@@ -10,8 +10,7 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart({
       server: {
-        preset: "netlify-edge",
-        entry: "server"
+        preset: "vercel"
       }
     }),
     react(),
