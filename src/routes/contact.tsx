@@ -27,25 +27,22 @@ function Contact() {
           </div>
         ) : (
           <form
-            name="contact"
-            method="POST"
-            data-netlify="true"
             onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
-              formData.append("form-name", "contact");
+              const name = formData.get("name") || "";
+              const email = formData.get("email") || "";
+              const subject = formData.get("subject") || "Contact from Website";
+              const message = formData.get("message") || "";
               
-              fetch("/", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(formData as any).toString(),
-              })
-                .then(() => setSent(true))
-                .catch((error) => alert("Failed to send message. Please try again."));
+              const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+              const mailtoLink = `mailto:durgabavani.poojaitems@gmail.com?subject=${encodeURIComponent(subject as string)}&body=${encodeURIComponent(body)}`;
+              
+              window.location.href = mailtoLink;
+              setSent(true);
             }}
             className="rounded-xl border border-border bg-card p-6 space-y-3"
           >
-            <input type="hidden" name="form-name" value="contact" />
             <div className="grid sm:grid-cols-2 gap-3">
               <input
                 required
