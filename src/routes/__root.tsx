@@ -61,44 +61,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Divine Purity — Premium Pooja Essentials" },
-      {
-        name: "description",
-        content:
-          "Curated premium essentials for your daily spiritual practice. Wholesale & retail.",
-      },
-      { property: "og:title", content: "Divine Purity — Premium Pooja Essentials" },
-      {
-        property: "og:description",
-        content: "Curated premium essentials for your daily spiritual practice.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "stylesheet", href: appCss }],
-  }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
 
-function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 import { WholesaleCartProvider } from "@/lib/wholesale-cart";
 
