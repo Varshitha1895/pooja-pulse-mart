@@ -27,19 +27,38 @@ function Contact() {
           </div>
         ) : (
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
-              const name = formData.get("name") || "";
-              const email = formData.get("email") || "";
-              const subject = formData.get("subject") || "Contact from Website";
-              const message = formData.get("message") || "";
+              const name = formData.get("name");
+              const email = formData.get("email");
+              const subject = formData.get("subject") || "New Customer Message from Website";
+              const message = formData.get("message");
               
-              const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
-              const mailtoLink = `mailto:durgabavani.poojaitems@gmail.com?subject=${encodeURIComponent(subject as string)}&body=${encodeURIComponent(body)}`;
-              
-              window.location.href = mailtoLink;
-              setSent(true);
+              try {
+                const response = await fetch("https://api.web3forms.com/submit", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                  },
+                  body: JSON.stringify({
+                    access_key: "9e67d1c6-6a47-444e-8d09-8497e028373b",
+                    name: name,
+                    email: email,
+                    subject: subject,
+                    message: message,
+                  }),
+                });
+                
+                if (response.ok) {
+                  setSent(true);
+                } else {
+                  alert("Something went wrong. Please try again.");
+                }
+              } catch (error) {
+                alert("Something went wrong. Please check your internet connection.");
+              }
             }}
             className="rounded-xl border border-border bg-card p-6 space-y-3"
           >
