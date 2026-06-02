@@ -27,36 +27,53 @@ function Contact() {
           </div>
         ) : (
           <form
+            name="contact"
+            method="POST"
+            data-netlify="true"
             onSubmit={(e) => {
               e.preventDefault();
-              setSent(true);
+              const formData = new FormData(e.currentTarget);
+              formData.append("form-name", "contact");
+              
+              fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData as any).toString(),
+              })
+                .then(() => setSent(true))
+                .catch((error) => alert("Failed to send message. Please try again."));
             }}
             className="rounded-xl border border-border bg-card p-6 space-y-3"
           >
+            <input type="hidden" name="form-name" value="contact" />
             <div className="grid sm:grid-cols-2 gap-3">
               <input
                 required
+                name="name"
                 placeholder="Name"
                 className="px-3 py-2.5 rounded-md border border-input bg-background"
               />
               <input
                 required
+                name="email"
                 type="email"
                 placeholder="Email"
                 className="px-3 py-2.5 rounded-md border border-input bg-background"
               />
             </div>
             <input
+              name="subject"
               placeholder="Subject"
               className="w-full px-3 py-2.5 rounded-md border border-input bg-background"
             />
             <textarea
               required
+              name="message"
               rows={5}
               placeholder="Message"
               className="w-full px-3 py-2.5 rounded-md border border-input bg-background"
             />
-            <button className="px-6 py-3 rounded-md bg-gradient-gold text-primary-foreground font-semibold">
+            <button type="submit" className="px-6 py-3 rounded-md bg-gradient-gold text-primary-foreground font-semibold">
               Send Message
             </button>
           </form>
