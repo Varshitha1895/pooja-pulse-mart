@@ -40,9 +40,6 @@ function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/70" />
         
         <div className="relative z-10 text-center px-4 max-w-4xl">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-accent/20 backdrop-blur border border-accent/40 text-cream text-xs uppercase tracking-[0.2em]">
-            Hybrid B2B & B2C Platform
-          </span>
           <div className="relative mt-6 inline-block">
 
             <h1 className="text-display text-5xl md:text-7xl font-semibold text-cream leading-tight">
