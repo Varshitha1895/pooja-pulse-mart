@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WholesaleCartRouteImport } from './routes/wholesale-cart'
 import { Route as WholesaleRouteImport } from './routes/wholesale'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ShippingPolicyRouteImport } from './routes/shipping-policy'
 import { Route as RetailRouteImport } from './routes/retail'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -40,9 +42,19 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShippingPolicyRoute = ShippingPolicyRouteImport.update({
+  id: '/shipping-policy',
+  path: '/shipping-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RetailRoute = RetailRouteImport.update({
   id: '/retail',
   path: '/retail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -112,7 +124,9 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/retail': typeof RetailRoute
+  '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
   '/wholesale': typeof WholesaleRoute
   '/wholesale-cart': typeof WholesaleCartRoute
@@ -129,7 +143,9 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/retail': typeof RetailRoute
+  '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
   '/wholesale': typeof WholesaleRoute
   '/wholesale-cart': typeof WholesaleCartRoute
@@ -147,7 +163,9 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/products': typeof ProductsRoute
   '/profile': typeof ProfileRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/retail': typeof RetailRoute
+  '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
   '/wholesale': typeof WholesaleRoute
   '/wholesale-cart': typeof WholesaleCartRoute
@@ -166,7 +184,9 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/products'
     | '/profile'
+    | '/refund-policy'
     | '/retail'
+    | '/shipping-policy'
     | '/terms'
     | '/wholesale'
     | '/wholesale-cart'
@@ -183,7 +203,9 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/products'
     | '/profile'
+    | '/refund-policy'
     | '/retail'
+    | '/shipping-policy'
     | '/terms'
     | '/wholesale'
     | '/wholesale-cart'
@@ -200,7 +222,9 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/products'
     | '/profile'
+    | '/refund-policy'
     | '/retail'
+    | '/shipping-policy'
     | '/terms'
     | '/wholesale'
     | '/wholesale-cart'
@@ -218,7 +242,9 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProductsRoute: typeof ProductsRoute
   ProfileRoute: typeof ProfileRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
   RetailRoute: typeof RetailRoute
+  ShippingPolicyRoute: typeof ShippingPolicyRoute
   TermsRoute: typeof TermsRoute
   WholesaleRoute: typeof WholesaleRoute
   WholesaleCartRoute: typeof WholesaleCartRoute
@@ -248,11 +274,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shipping-policy': {
+      id: '/shipping-policy'
+      path: '/shipping-policy'
+      fullPath: '/shipping-policy'
+      preLoaderRoute: typeof ShippingPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/retail': {
       id: '/retail'
       path: '/retail'
       fullPath: '/retail'
       preLoaderRoute: typeof RetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -346,7 +386,9 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProductsRoute: ProductsRoute,
   ProfileRoute: ProfileRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
   RetailRoute: RetailRoute,
+  ShippingPolicyRoute: ShippingPolicyRoute,
   TermsRoute: TermsRoute,
   WholesaleRoute: WholesaleRoute,
   WholesaleCartRoute: WholesaleCartRoute,
