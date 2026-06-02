@@ -10,18 +10,9 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart({
       server: {
-        preset: "vercel",
+        preset: "netlify",
       }
     }),
     react(),
   ],
-  // @ts-ignore - nitro is consumed by the tanstack start plugin
-  nitro: {
-    preset: "vercel",
-    output: {
-      dir: ".vercel/output",
-      serverDir: ".vercel/output/functions/__server.func",
-      publicDir: ".vercel/output/static",
-    },
-  },
 });
