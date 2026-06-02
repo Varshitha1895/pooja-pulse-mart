@@ -81,7 +81,7 @@ function Contact() {
         <aside className="space-y-4">
           <div className="rounded-xl border border-border bg-card p-5">
             <Phone className="h-5 w-5 text-accent" />
-            <p className="mt-2 font-semibold">+91 99999 99999</p>
+            <p className="mt-2 font-semibold">+91 96763 98438</p>
             <p className="text-xs text-muted-foreground">Mon–Sat · 9 AM – 8 PM</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-5">
