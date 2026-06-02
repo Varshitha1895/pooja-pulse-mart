@@ -69,11 +69,11 @@ function Contact() {
           </div>
           <div className="rounded-xl border border-border bg-card p-5">
             <Mail className="h-5 w-5 text-accent" />
-            <p className="mt-2 font-semibold">hello@divinepurity.in</p>
+            <p className="mt-2 font-semibold text-sm sm:text-base break-all">durgabavani.poojaitems@gmail.com</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-5">
             <MapPin className="h-5 w-5 text-accent" />
-            <p className="mt-2 font-semibold">Chennai, Tamil Nadu</p>
+            <p className="mt-2 font-semibold">Hyderabad, Telangana</p>
             <p className="text-xs text-muted-foreground">Visits by appointment</p>
           </div>
         </aside>
