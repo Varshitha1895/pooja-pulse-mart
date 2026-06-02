@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/site/Navbar";
+import { Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/refund-policy")({
   component: RefundPolicy,

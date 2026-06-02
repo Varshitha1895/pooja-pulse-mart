@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart({
       server: {
-        preset: "netlify",
+        preset: "netlify-edge",
         entry: "server"
       }
     }),
