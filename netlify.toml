@@ -1,0 +1,7 @@
+[build]
+  command = "npm run build && mkdir -p .netlify/edge-functions && cp -r dist/server/* .netlify/edge-functions/ || true"
+  publish = "dist/client"
+
+[[edge_functions]]
+  function = "server"
+  path = "/*"
