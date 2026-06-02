@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { wholesaleProducts as products } from "@/lib/wholesale-products";
 import { Package } from "lucide-react";
 import { useWholesaleCart } from "@/lib/wholesale-cart";
+import shivaImg from "@/assets/gods/shiva.png";
 
 export const Route = createFileRoute("/wholesale")({
   head: () => ({
@@ -24,10 +25,28 @@ function Wholesale() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 md:px-8 py-12">
-      <div className="relative rounded-2xl bg-gradient-gold text-primary-foreground p-8 md:p-12 shadow-warm overflow-hidden">
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/10 blur-[100px] animate-pulse pointer-events-none rounded-full" />
+      <style>{`
+        @keyframes divine-pan {
+          0% { transform: scale(1.05) translate(0, 0); }
+          50% { transform: scale(1.1) translate(-2%, 1%); }
+          100% { transform: scale(1.05) translate(0, 0); }
+        }
+        .animate-divine-pan {
+          animation: divine-pan 25s ease-in-out infinite;
+        }
+      `}</style>
+      
+      <div className="relative rounded-2xl bg-[#1a1412] text-white p-8 md:p-12 shadow-2xl overflow-hidden group">
+        {/* Animated Background Image */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-[center_top_-2rem] bg-no-repeat opacity-50 animate-divine-pan"
+          style={{ backgroundImage: `url(${shivaImg})` }}
+        />
+        {/* Gradient Overlay to ensure text readability */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        
         <div className="relative z-10">
-          <p className="uppercase tracking-[0.3em] text-xs font-semibold opacity-90">Wholesale</p>
+          <p className="uppercase tracking-[0.3em] text-xs font-semibold opacity-90 text-primary">Wholesale</p>
           <h1 className="mt-3 text-display text-4xl md:text-5xl font-semibold">
             Bulk Orders. Better Pricing.
           </h1>
@@ -47,7 +66,7 @@ function Wholesale() {
         {products.map((p) => (
           <div
             key={p.id}
-            className="rounded-xl border border-border bg-card overflow-hidden hover:shadow-warm transition flex flex-col group"
+            className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-warm transition flex flex-col group"
           >
             <div className="aspect-[4/3] bg-gradient-warm overflow-hidden relative">
               <img

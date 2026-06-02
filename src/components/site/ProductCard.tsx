@@ -1,4 +1,3 @@
-import type { Product } from "@/lib/types";
 import { useCart } from "@/lib/cart";
 import { Plus } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -63,7 +62,7 @@ export function ProductCard({ product, compact = false, isWholesale = false }: {
         to={`/product/$productId`} 
         params={{ productId: product.id }} 
         search={{ type: 'wholesale' }}
-        className={`group relative rounded-xl border border-border bg-card overflow-hidden hover:shadow-warm hover:border-accent/40 hover:-translate-y-1 transition-all duration-300 block`}
+        className={`group relative rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-warm hover:border-accent/40 hover:-translate-y-1 transition-all duration-300 block`}
       >
         {inner}
       </Link>
@@ -72,7 +71,7 @@ export function ProductCard({ product, compact = false, isWholesale = false }: {
 
   return (
     <div
-      className={`group relative rounded-xl border border-border bg-card overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(255,165,0,0.2)] hover:border-accent/40 hover:-translate-y-1 transition-all duration-300 ${compact ? "" : ""}`}
+      className={`group relative rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(255,165,0,0.2)] hover:border-accent/40 hover:-translate-y-1 transition-all duration-300 ${compact ? "" : ""}`}
     >
       {inner}
     </div>

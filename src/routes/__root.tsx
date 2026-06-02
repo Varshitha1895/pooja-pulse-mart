@@ -12,6 +12,7 @@ import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { ChatWidget } from "@/components/site/ChatWidget";
 import { SpiritualCursor } from "@/components/site/SpiritualCursor";
+import { DivineScrollBackground } from "@/components/site/DivineScrollBackground";
 import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
 
@@ -108,7 +109,8 @@ function RootComponent() {
       <AuthProvider>
         <CartProvider>
           <WholesaleCartProvider>
-            <div className="min-h-screen flex flex-col">
+            <DivineScrollBackground />
+            <div className="min-h-screen flex flex-col relative z-0">
               <Navbar />
               <main className="flex-1">
                 <Outlet />

@@ -8,6 +8,7 @@ import { ShoppingBag, Package, Star, MessageCircle, ChevronRight, Check } from "
 import { useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useNavigate } from "@tanstack/react-router";
+import { DivineBackground } from "@/components/site/DivineBackground";
 
 export const Route = createFileRoute("/product/$productId")({
   component: ProductDetails,
@@ -38,8 +39,7 @@ function ProductDetails() {
     setAdded('retail');
     setTimeout(() => {
       setAdded(null);
-      navigate({ to: "/cart" });
-    }, 600);
+    }, 2000);
   };
 
   const handleAddWholesale = () => {
@@ -47,8 +47,7 @@ function ProductDetails() {
     setAdded('wholesale');
     setTimeout(() => {
       setAdded(null);
-      navigate({ to: "/wholesale-cart" });
-    }, 600);
+    }, 2000);
   };
 
   const catalogProducts = isWholesale 
@@ -65,21 +64,25 @@ function ProductDetails() {
   }
 
   return (
-    <div className="bg-muted/10 min-h-screen pb-24">
-      {/* Breadcrumbs */}
-      <div className="bg-background border-b border-border">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center text-xs text-muted-foreground gap-2">
-          <Link to="/" className="hover:text-foreground transition">Home</Link>
-          <ChevronRight className="h-3 w-3" />
-          <Link to="/retail" className="hover:text-foreground transition">{product.category}</Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="text-foreground font-medium truncate">{product.name}</span>
+    <>
+      {isWholesale && <DivineBackground />}
+      <div className={`min-h-screen pb-24 relative z-10 ${isWholesale ? 'bg-transparent text-white' : 'bg-muted/10'}`}>
+        {/* Breadcrumbs */}
+        <div className={isWholesale ? 'bg-black/40 backdrop-blur-md border-b border-white/10' : 'bg-background border-b border-border'}>
+          <div className="mx-auto max-w-6xl px-4 py-3 flex items-center text-xs text-muted-foreground gap-2">
+            <Link to="/" className="hover:text-foreground transition">Home</Link>
+            <ChevronRight className="h-3 w-3" />
+            <Link to="/retail" className="hover:text-foreground transition">{product.category}</Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className={isWholesale ? 'text-white font-medium truncate' : 'text-foreground font-medium truncate'}>{product.name}</span>
+          </div>
         </div>
-      </div>
 
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Main Product Section */}
-        <div className="bg-background rounded-2xl shadow-sm border border-border p-4 md:p-8 grid md:grid-cols-[1fr_420px] gap-8 md:gap-12">
+        <div className={`rounded-2xl shadow-sm border p-4 md:p-8 grid md:grid-cols-[1fr_420px] gap-8 md:gap-12 ${
+          isWholesale ? 'bg-black/30 backdrop-blur-md border-white/20 shadow-2xl' : 'bg-background border-border'
+        }`}>
           
           {/* Left: Image & Retail Action */}
           <div className="flex flex-col gap-6">
@@ -90,43 +93,17 @@ function ProductDetails() {
                 className="w-full h-full object-cover"
               />
             </div>
-            {isWholesale ? (
-              <button 
-                onClick={handleAddWholesale}
-                className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-foreground text-background font-bold text-lg hover:opacity-90 transition shadow-warm"
-              >
-                {added === 'wholesale' ? (
-                  <><Check className="h-5 w-5" /> Added</>
-                ) : (
-                  <><Package className="h-5 w-5" /> Add to Cart</>
-                )}
-              </button>
-            ) : (
-              <button 
-                onClick={handleAddRetail}
-                className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-lg hover:opacity-90 transition shadow-warm"
-              >
-                {added === 'retail' ? (
-                  <><Check className="h-5 w-5" /> Added</>
-                ) : (
-                  <><ShoppingBag className="h-5 w-5" /> Add to Cart</>
-                )}
-              </button>
-            )}
-            <p className="text-center text-xs text-muted-foreground flex items-center justify-center gap-1">
-              <Check className="h-3 w-3 text-green-500" /> Next day delivery by 6 PM
-            </p>
           </div>
 
           {/* Right: Details & Wholesale Action */}
           <div className="flex flex-col">
-            <div className="mb-2 inline-flex items-center gap-1.5 bg-accent/10 text-accent text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md w-fit">
-              <Star className="h-3 w-3 fill-accent" /> Premium Quality
+            <div className="mb-2 inline-flex items-center gap-1.5 bg-accent/20 text-accent-foreground text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md w-fit">
+              <Star className="h-3 w-3 fill-current" /> Premium Quality
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mt-2 leading-tight">
+            <h1 className={`text-3xl md:text-4xl font-bold mt-2 leading-tight ${isWholesale ? 'text-white' : 'text-foreground'}`}>
               {product.name}
             </h1>
-            <p className="text-muted-foreground mt-2 text-sm">{product.category} • 1 {product.unit}</p>
+            <p className={`${isWholesale ? 'text-gray-300' : 'text-muted-foreground'} mt-2 text-sm`}>{product.category} • 1 {product.unit}</p>
 
             {!isWholesale && (
               <div className="my-6 pt-6 border-t border-border">
@@ -140,12 +117,47 @@ function ProductDetails() {
             )}
 
             {/* Product Description */}
-            <div className={`bg-muted/30 rounded-xl p-5 mb-6 border border-border ${isWholesale ? 'mt-6 pt-6' : ''}`}>
-              <h3 className="text-sm font-bold text-foreground mb-3">Description</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className={`rounded-xl p-5 mb-6 border ${
+              isWholesale 
+                ? 'bg-black/40 border-white/10 mt-6 pt-6' 
+                : 'bg-muted/30 border-border'
+            }`}>
+              <h3 className={`text-sm font-bold mb-3 ${isWholesale ? 'text-white' : 'text-foreground'}`}>Description</h3>
+              <p className={`text-sm leading-relaxed ${isWholesale ? 'text-gray-300' : 'text-muted-foreground'}`}>
                 {product.description || "Premium divine item for your daily rituals."}
               </p>
             </div>
+
+            {/* Primary Action Button */}
+            <div className={`flex flex-col gap-3 ${isWholesale ? 'mb-0' : 'mb-6'}`}>
+              {isWholesale ? (
+                <button 
+                  onClick={handleAddWholesale}
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-white text-black font-bold text-lg hover:opacity-90 transition shadow-warm"
+                >
+                  {added === 'wholesale' ? (
+                    <><Check className="h-5 w-5" /> Added</>
+                  ) : (
+                    <><Package className="h-5 w-5" /> Add to Cart</>
+                  )}
+                </button>
+              ) : (
+                <button 
+                  onClick={handleAddRetail}
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-lg hover:opacity-90 transition shadow-warm"
+                >
+                  {added === 'retail' ? (
+                    <><Check className="h-5 w-5" /> Added</>
+                  ) : (
+                    <><ShoppingBag className="h-5 w-5" /> Add to Cart</>
+                  )}
+                </button>
+              )}
+              <p className={`text-center text-xs flex items-center justify-center gap-1 ${isWholesale ? 'text-gray-400' : 'text-muted-foreground'}`}>
+                <Check className="h-3 w-3 text-green-500" /> Next day delivery by 6 PM
+              </p>
+            </div>
+
 
             {/* Wholesale Action - Only show if in retail mode to upsell */}
             {!isWholesale && (
@@ -213,5 +225,6 @@ function ProductDetails() {
 
       </div>
     </div>
+    </>
   );
 }

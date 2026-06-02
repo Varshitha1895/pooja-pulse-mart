@@ -4,6 +4,7 @@ import { retailProducts as products, categories } from "@/lib/retail-products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart } from "@/lib/cart";
 import { Zap, ShoppingBag } from "lucide-react";
+import shivaImg from "@/assets/gods/shiva.png";
 
 export const Route = createFileRoute("/retail")({
   head: () => ({
@@ -25,20 +26,42 @@ function Retail() {
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 md:px-8 py-8">
-      <div className="absolute top-10 left-10 w-48 h-48 bg-primary/5 blur-[80px] animate-pulse pointer-events-none rounded-full" />
-      <div className="flex items-center gap-2 mb-6 relative z-10">
-        <Zap className="h-5 w-5 text-accent animate-bounce" style={{ animationDuration: '3s' }} />
-        <p className="text-sm font-semibold text-accent uppercase tracking-wider">
-          Quick Delivery · Next day by 6 PM
-        </p>
+      <style>{`
+        @keyframes divine-pan {
+          0% { transform: scale(1.05) translate(0, 0); }
+          50% { transform: scale(1.1) translate(2%, -1%); }
+          100% { transform: scale(1.05) translate(0, 0); }
+        }
+        .animate-divine-pan {
+          animation: divine-pan 25s ease-in-out infinite;
+        }
+      `}</style>
+      
+      <div className="relative rounded-2xl bg-[#1a1412] text-white p-8 md:p-12 shadow-2xl overflow-hidden mb-10 group">
+        {/* Animated Background Image */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-[center_top_-2rem] bg-no-repeat opacity-50 animate-divine-pan"
+          style={{ backgroundImage: `url(${shivaImg})` }}
+        />
+        {/* Gradient Overlay to ensure text readability */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-4">
+            <Zap className="h-5 w-5 text-primary animate-bounce" style={{ animationDuration: '3s' }} />
+            <p className="text-sm font-bold text-primary uppercase tracking-wider">
+              Quick Delivery · Next day by 6 PM
+            </p>
+          </div>
+          <h1 className="text-display text-4xl font-semibold mb-2 text-white">Retail Store</h1>
+          <p className="text-gray-300">Tap to add. We deliver tomorrow.</p>
+        </div>
       </div>
-      <h1 className="text-display text-4xl font-semibold mb-2 relative z-10">Retail Store</h1>
-      <p className="text-muted-foreground mb-8 relative z-10">Tap to add. We deliver tomorrow.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6 md:gap-8 relative z-10">
         <aside className="md:sticky md:top-24 self-start">
-          <div className="rounded-xl border border-border bg-card overflow-hidden">
-            <p className="hidden md:block px-4 py-3 bg-secondary text-xs font-semibold uppercase tracking-wider">
+          <div className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden">
+            <p className="hidden md:block px-4 py-3 bg-white/60 text-xs font-semibold uppercase tracking-wider">
               Categories
             </p>
             <ul className="text-sm flex md:flex-col overflow-x-auto scrollbar-hide">

@@ -5,6 +5,8 @@ import hero from "@/assets/hero-pooja.jpg";
 import muralBgRealistic from "@/assets/rama-sita-realistic.png";
 import { DivinePetals } from "@/components/site/DivinePetals";
 import { retailProducts as products } from "@/lib/retail-products";
+import ganeshaImg from "@/assets/gods/ganesha.png";
+import krishnaImg from "@/assets/gods/krishna.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -112,40 +114,54 @@ function Home() {
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             
           {/* Wholesale */}
-          <div className="rounded-2xl border border-border bg-card p-10 md:p-14 shadow-warm flex flex-col items-start">
-            <div className="h-14 w-14 rounded-full bg-primary/10 grid place-items-center">
-              <Package className="h-7 w-7 text-primary" />
-            </div>
-            <h3 className="mt-5 text-display text-3xl md:text-4xl font-semibold">Wholesale</h3>
-            <p className="mt-3 text-muted-foreground text-lg">
-              Bulk solutions for temples and retailers.
-            </p>
-            <div className="mt-auto pt-8">
-              <Link
-                to="/wholesale"
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-semibold tracking-wide hover:opacity-90 transition"
-              >
-                ENTER WHOLESALE STORE <ArrowRight className="h-5 w-5" />
-              </Link>
+          <div className="group/revealcard relative rounded-2xl border border-border bg-card p-10 md:p-14 shadow-warm flex flex-col items-start overflow-hidden transition-all duration-500 hover:shadow-glow">
+            {/* Background Reveal */}
+            <div 
+              className="absolute -right-10 -bottom-10 w-72 h-72 z-0 bg-no-repeat bg-right-bottom bg-contain opacity-0 group-hover/revealcard:opacity-10 transition-opacity duration-1000 ease-out" 
+              style={{ backgroundImage: `url(${krishnaImg})` }} 
+            />
+            <div className="relative z-10 flex flex-col items-start h-full w-full">
+              <div className="h-14 w-14 rounded-full bg-primary/10 grid place-items-center group-hover/revealcard:-translate-y-1 transition-transform duration-300">
+                <Package className="h-7 w-7 text-primary group-hover/revealcard:animate-pulse" />
+              </div>
+              <h3 className="mt-5 text-display text-3xl md:text-4xl font-semibold">Wholesale</h3>
+              <p className="mt-3 text-muted-foreground text-lg">
+                Bulk solutions for temples and retailers.
+              </p>
+              <div className="mt-auto pt-8">
+                <Link
+                  to="/wholesale"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-semibold tracking-wide hover:opacity-90 transition"
+                >
+                  ENTER WHOLESALE STORE <ArrowRight className="h-5 w-5" />
+                </Link>
+              </div>
             </div>
           </div>
 
           {/* Retail */}
-          <div className="rounded-2xl border border-border bg-gradient-gold text-primary-foreground p-10 md:p-14 shadow-warm flex flex-col items-start">
-            <div className="h-14 w-14 rounded-full bg-white/20 grid place-items-center backdrop-blur">
-              <Zap className="h-7 w-7 fill-current" />
-            </div>
-            <h3 className="mt-5 text-display text-3xl md:text-4xl font-semibold">Retail</h3>
-            <p className="mt-3 text-primary-foreground/90 text-lg">
-              Quick delivery for your home pooja needs.
-            </p>
-            <div className="mt-auto pt-8">
-              <Link
-                to="/retail"
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-foreground text-background font-semibold tracking-wide hover:opacity-90 transition"
-              >
-                SHOP RETAIL NOW <ArrowRight className="h-5 w-5" />
-              </Link>
+          <div className="group/revealcard relative rounded-2xl border border-border bg-gradient-gold text-primary-foreground p-10 md:p-14 shadow-warm flex flex-col items-start overflow-hidden transition-all duration-500 hover:shadow-glow">
+            {/* Background Reveal */}
+            <div 
+              className="absolute -right-10 -bottom-10 w-72 h-72 z-0 bg-no-repeat bg-right-bottom bg-contain opacity-0 group-hover/revealcard:opacity-20 mix-blend-overlay transition-opacity duration-1000 ease-out" 
+              style={{ backgroundImage: `url(${ganeshaImg})` }} 
+            />
+            <div className="relative z-10 flex flex-col items-start h-full w-full">
+              <div className="h-14 w-14 rounded-full bg-white/20 grid place-items-center backdrop-blur group-hover/revealcard:-translate-y-1 transition-transform duration-300">
+                <Zap className="h-7 w-7 fill-current group-hover/revealcard:animate-pulse" />
+              </div>
+              <h3 className="mt-5 text-display text-3xl md:text-4xl font-semibold">Retail</h3>
+              <p className="mt-3 text-primary-foreground/90 text-lg">
+                Quick delivery for your home pooja needs.
+              </p>
+              <div className="mt-auto pt-8">
+                <Link
+                  to="/retail"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-foreground text-background font-semibold tracking-wide hover:opacity-90 transition"
+                >
+                  SHOP RETAIL NOW <ArrowRight className="h-5 w-5" />
+                </Link>
+              </div>
             </div>
           </div>
 
