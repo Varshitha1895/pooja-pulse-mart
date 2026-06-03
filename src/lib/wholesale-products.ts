@@ -480,76 +480,9 @@ const seed: Omit<Product, "id">[] = [
     image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779894676/Gemini_Generated_Image_w2ctztw2ctztw2ct_giueki.png",
     description: "Pure and authentic karpuram and pooja."
   },
- // card 35
-   { 
-    name: "KUNKUMA ", 
-    category: "Kunkum", 
-    price: 150, 
-    unit: "pack", 
-    catalog: "wholesale",
-    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779894676/Gemini_Generated_Image_w2ctztw2ctztw2ct_giueki.png",
-    description: "Pure and authentic karpuram and pooja."
-  },
- // card 35
-   { 
-    name: "KUNKUMA ", 
-    category: "Kunkum", 
-    price: 150, 
-    unit: "pack", 
-    catalog: "wholesale",
-    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779894676/Gemini_Generated_Image_w2ctztw2ctztw2ct_giueki.png",
-    description: "Pure and authentic karpuram and pooja."
-  },
- // card 35
-   { 
-    name: "KUNKUMA ", 
-    category: "Kunkum", 
-    price: 150, 
-    unit: "pack", 
-    catalog: "wholesale",
-    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779894676/Gemini_Generated_Image_w2ctztw2ctztw2ct_giueki.png",
-    description: "Pure and authentic karpuram and pooja."
-  },
- // card 35
-   { 
-    name: "KUNKUMA ", 
-    category: "Kunkum", 
-    price: 150, 
-    unit: "pack", 
-    catalog: "wholesale",
-    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779894676/Gemini_Generated_Image_w2ctztw2ctztw2ct_giueki.png",
-    description: "Pure and authentic karpuram and pooja."
-  },
- // card 35
-   { 
-    name: "KUNKUMA ", 
-    category: "Kunkum", 
-    price: 150, 
-    unit: "pack", 
-    catalog: "wholesale",
-    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779894676/Gemini_Generated_Image_w2ctztw2ctztw2ct_giueki.png",
-    description: "Pure and authentic karpuram and pooja."
-  },
- // card 35
-   { 
-    name: "KUNKUMA ", 
-    category: "Kunkum", 
-    price: 150, 
-    unit: "pack", 
-    catalog: "wholesale",
-    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779894676/Gemini_Generated_Image_w2ctztw2ctztw2ct_giueki.png",
-    description: "Pure and authentic karpuram and pooja."
-  },
- // card 35
-   { 
-    name: "KUNKUMA ", 
-    category: "Kunkum", 
-    price: 150, 
-    unit: "pack", 
-    catalog: "wholesale",
-    image: "https://res.cloudinary.com/djuu7sxfw/image/upload/v1779894676/Gemini_Generated_Image_w2ctztw2ctztw2ct_giueki.png",
-    description: "Pure and authentic karpuram and pooja."
-  },
+ 
+
+ 
 ];
 
 // Add an ID to each product based on its index
