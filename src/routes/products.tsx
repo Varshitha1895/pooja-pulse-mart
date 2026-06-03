@@ -5,7 +5,7 @@ import { ProductCard } from "@/components/site/ProductCard";
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "All Products — Divine Purity" },
+      { title: "All Products — Divine Hub" },
       { name: "description", content: "Browse our complete catalog of premium pooja essentials." },
     ],
   }),
@@ -30,3 +30,4 @@ function AllProducts() {
     </div>
   );
 }
+

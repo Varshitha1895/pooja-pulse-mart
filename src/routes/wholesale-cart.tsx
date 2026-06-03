@@ -3,7 +3,7 @@ import { useWholesaleCart } from "@/lib/wholesale-cart";
 import { Trash2, ArrowRight, Package, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/wholesale-cart")({
-  head: () => ({ meta: [{ title: "Wholesale Quote Cart — Divine Purity" }] }),
+  head: () => ({ meta: [{ title: "Wholesale Quote Cart — Divine Hub" }] }),
   component: WholesaleCartPage,
 });
 
@@ -29,7 +29,7 @@ function WholesaleCartPage() {
   }
 
   const generateWhatsAppLink = () => {
-    let msg = "Hello Divine Purity, I would like a bulk quote for the following items:%0A%0A";
+    let msg = "Hello Divine Hub, I would like a bulk quote for the following items:%0A%0A";
     items.forEach((item, index) => {
       msg += `${index + 1}. ${item.product.name} - ${item.qty} ${item.product.unit || 'units'}%0A`;
     });
@@ -115,3 +115,4 @@ function WholesaleCartPage() {
     </div>
   );
 }
+

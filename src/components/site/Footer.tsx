@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="mt-20 border-t-4 border-primary bg-foreground text-background">
       <div className="mx-auto max-w-7xl px-4 md:px-8 py-16 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
-          <h3 className="text-display text-2xl text-primary font-semibold">Divine Purity</h3>
+          <h3 className="text-display text-2xl text-primary font-semibold">Divine Hub</h3>
           <p className="mt-4 text-sm text-background/70 max-w-md leading-relaxed">
             Curated premium pooja essentials. Trusted by households and temples across India.
           </p>
@@ -64,7 +64,7 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10 bg-black/20">
         <div className="mx-auto max-w-7xl px-4 md:px-8 py-6 flex flex-col sm:flex-row gap-4 items-center justify-between text-xs text-background/60">
-          <p>© {new Date().getFullYear()} Divine Purity. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Divine Hub. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <a href="#" aria-label="Instagram" className="hover:text-primary transition-colors">
               <Instagram className="h-4 w-4" />
@@ -81,3 +81,4 @@ export function Footer() {
     </footer>
   );
 }
+

@@ -237,7 +237,7 @@ function Profile() {
                 Log Out
               </button>
               <div className="mt-6 text-center">
-                 <span className="text-display text-2xl font-bold text-muted-foreground/30 uppercase tracking-widest">Divine Purity</span>
+                 <span className="text-display text-2xl font-bold text-muted-foreground/30 uppercase tracking-widest">Divine Hub</span>
               </div>
             </div>
           </div>
@@ -504,3 +504,4 @@ function Profile() {
     </div>
   );
 }
+

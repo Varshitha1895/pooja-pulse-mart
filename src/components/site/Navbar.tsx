@@ -25,13 +25,13 @@ export function Navbar() {
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <img
             src={logo}
-            alt="Divine Purity"
+            alt="Divine Hub"
             width={40}
             height={40}
             className="h-10 w-10 object-contain"
           />
           <span className="hidden sm:block text-display text-xl text-primary font-semibold tracking-wide">
-            Divine Purity
+            Divine Hub
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
@@ -138,3 +138,4 @@ export function Navbar() {
     </header>
   );
 }
+

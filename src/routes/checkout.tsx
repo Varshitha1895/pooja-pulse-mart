@@ -63,7 +63,7 @@ function Checkout() {
         </div>
         <h2 className="text-3xl font-bold mb-2">Order Placed Successfully!</h2>
         <p className="text-muted-foreground max-w-md mb-8">
-          Thank you for shopping with Divine Purity. Your order has been received and is being processed.
+          Thank you for shopping with Divine Hub. Your order has been received and is being processed.
         </p>
         <Link
           to="/"
@@ -278,3 +278,4 @@ function Checkout() {
     </div>
   );
 }
+

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({ meta: [{ title: "Privacy — Divine Purity" }] }),
+  head: () => ({ meta: [{ title: "Privacy — Divine Hub" }] }),
   component: () => (
     <div className="mx-auto max-w-3xl px-4 py-16 prose">
       <h1 className="text-display text-4xl font-semibold">Privacy Policy</h1>
@@ -12,3 +12,4 @@ export const Route = createFileRoute("/privacy")({
     </div>
   ),
 });
+

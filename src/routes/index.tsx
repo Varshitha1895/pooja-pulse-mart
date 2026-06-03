@@ -11,7 +11,7 @@ import krishnaImg from "@/assets/gods/krishna.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Divine Purity — Premium Pooja Essentials" },
+      { title: "Divine Hub — Premium Pooja Essentials" },
       {
         name: "description",
         content:
@@ -43,7 +43,7 @@ function Home() {
           <div className="relative mt-6 inline-block">
 
             <h1 className="text-display text-5xl md:text-7xl font-semibold text-cream leading-tight">
-              Experience <em className="text-accent not-italic">Divine Purity</em> in Every Ritual
+              Experience <em className="text-accent not-italic">Divine Hub</em> in Every Ritual
             </h1>
           </div>
           <p className="mt-5 text-lg text-cream/85 max-w-2xl mx-auto">
@@ -257,3 +257,4 @@ function Home() {
     </>
   );
 }
+

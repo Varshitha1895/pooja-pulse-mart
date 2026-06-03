@@ -42,7 +42,7 @@ export function ChatWidget() {
       {open && (
         <div className="fixed bottom-24 right-5 z-50 w-[340px] max-w-[calc(100vw-2.5rem)] rounded-xl border border-border bg-card shadow-warm overflow-hidden flex flex-col">
           <div className="bg-gradient-gold text-primary-foreground px-4 py-3">
-            <p className="font-semibold">Divine Purity Care</p>
+            <p className="font-semibold">Divine Hub Care</p>
             <p className="text-xs opacity-90">Typically replies in minutes</p>
           </div>
           <div className="p-4 space-y-3 max-h-72 overflow-y-auto bg-background">
@@ -82,3 +82,4 @@ export function ChatWidget() {
     </>
   );
 }
+

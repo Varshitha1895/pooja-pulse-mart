@@ -4,7 +4,7 @@ import { Trash2, ArrowRight } from "lucide-react";
 import { DeepaAnimation } from "@/components/PoojaAnimations";
 
 export const Route = createFileRoute("/cart")({
-  head: () => ({ meta: [{ title: "Your Cart — Divine Purity" }] }),
+  head: () => ({ meta: [{ title: "Your Cart — Divine Hub" }] }),
   component: CartPage,
 });
 
@@ -104,3 +104,4 @@ function CartPage() {
     </div>
   );
 }
+

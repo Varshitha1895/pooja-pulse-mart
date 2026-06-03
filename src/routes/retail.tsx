@@ -9,7 +9,7 @@ import shivaImg from "@/assets/gods/shiva.png";
 export const Route = createFileRoute("/retail")({
   head: () => ({
     meta: [
-      { title: "Retail Store — Divine Purity" },
+      { title: "Retail Store — Divine Hub" },
       {
         name: "description",
         content: "Fast Zepto-style shopping for pooja essentials. Next-day delivery.",
@@ -102,3 +102,4 @@ function Retail() {
     </div>
   );
 }
+

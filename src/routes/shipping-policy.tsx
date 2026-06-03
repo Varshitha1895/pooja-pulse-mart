@@ -26,10 +26,11 @@ function ShippingPolicy() {
           <p className="text-gray-700 mb-4">You will receive a Shipment Confirmation email once your order has shipped containing your tracking number(s). The tracking number will be active within 24 hours.</p>
 
           <h2 className="text-2xl font-bold text-amber-800 mt-8 mb-4">4. Damages</h2>
-          <p className="text-gray-700 mb-4">Divine Purity is not liable for any products damaged or lost during shipping. If you received your order damaged, please contact the shipment carrier to file a claim. Please save all packaging materials and damaged goods before filing a claim.</p>
+          <p className="text-gray-700 mb-4">Divine Hub is not liable for any products damaged or lost during shipping. If you received your order damaged, please contact the shipment carrier to file a claim. Please save all packaging materials and damaged goods before filing a claim.</p>
         </div>
       </main>
       <Footer />
     </div>
   );
 }
+

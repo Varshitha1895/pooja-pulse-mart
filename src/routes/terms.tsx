@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/terms")({
-  head: () => ({ meta: [{ title: "Terms — Divine Purity" }] }),
+  head: () => ({ meta: [{ title: "Terms — Divine Hub" }] }),
   component: () => (
     <div className="mx-auto max-w-3xl px-4 py-16 prose">
       <h1 className="text-display text-4xl font-semibold">Terms of Service</h1>
@@ -12,3 +12,4 @@ export const Route = createFileRoute("/terms")({
     </div>
   ),
 });
+

@@ -7,7 +7,7 @@ import shivaImg from "@/assets/gods/shiva.png";
 export const Route = createFileRoute("/wholesale")({
   head: () => ({
     meta: [
-      { title: "Wholesale Store — Divine Purity" },
+      { title: "Wholesale Store — Divine Hub" },
       {
         name: "description",
         content: "Bulk pricing for temples and retailers. Chat on WhatsApp for custom quotes.",
@@ -104,3 +104,4 @@ function Wholesale() {
     </div>
   );
 }
+

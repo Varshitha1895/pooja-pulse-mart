@@ -5,7 +5,7 @@ import { useState } from "react";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Divine Purity" },
+      { title: "Contact — Divine Hub" },
       { name: "description", content: "Get in touch for wholesale enquiries and support." },
     ],
   }),
@@ -114,3 +114,4 @@ function Contact() {
     </div>
   );
 }
+
