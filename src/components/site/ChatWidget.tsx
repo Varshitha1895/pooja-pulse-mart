@@ -13,7 +13,7 @@ const RESPONSES: Record<string, string> = {
   "Talk to Human": "Connecting you to our care team — they're available 9 AM to 8 PM, Mon–Sat.",
 };
 
-const WHATSAPP = "https://wa.me/919999999999?text=Hi%20Divine%20Purity";
+const WHATSAPP = "https://wa.me/919676398438?text=Hi%20Divine%20Hub";
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);

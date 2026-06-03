@@ -34,7 +34,7 @@ function WholesaleCartPage() {
       msg += `${index + 1}. ${item.product.name} - ${item.qty} ${item.product.unit || 'units'}%0A`;
     });
     msg += `%0APlease let me know the best wholesale pricing for this order.`;
-    return `https://wa.me/919999999999?text=${msg}`;
+    return `https://wa.me/919676398438?text=${msg}`;
   };
 
   return (
