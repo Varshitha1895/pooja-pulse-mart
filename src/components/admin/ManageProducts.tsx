@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Loader2, Trash2, Package } from "lucide-react";
+import { Loader2, Trash2, Package, Pencil, Check, X } from "lucide-react";
 import type { Product } from "@/lib/types";
 
 export function ManageProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<Partial<Product>>({});
 
   useEffect(() => {
     fetchProducts();
@@ -45,10 +47,8 @@ export function ManageProducts() {
       return;
     }
 
-    setIsDeleting(id);
+    setIsProcessing(id);
     try {
-      // Note: We are just deleting from the database. 
-      // Supabase storage files can also be deleted here if needed, but DB deletion removes it from the store.
       const { error } = await supabase
         .from('products')
         .delete()
@@ -56,14 +56,53 @@ export function ManageProducts() {
 
       if (error) throw error;
       
-      // Update UI
       setProducts(products.filter(p => p.id !== id));
       
     } catch (err) {
       console.error("Error deleting product:", err);
       alert("Failed to delete the product. Check your database permissions.");
     } finally {
-      setIsDeleting(null);
+      setIsProcessing(null);
+    }
+  };
+
+  const startEditing = (product: Product) => {
+    setEditingId(product.id);
+    setEditForm({
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      unit: product.unit,
+    });
+  };
+
+  const handleSave = async (id: string) => {
+    if (!editForm.name || !editForm.category || !editForm.price) {
+      alert("Name, Category, and Price are required.");
+      return;
+    }
+
+    setIsProcessing(id);
+    try {
+      const { error } = await supabase
+        .from('products')
+        .update({
+          name: editForm.name,
+          category: editForm.category,
+          price: editForm.price,
+          unit: editForm.unit,
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      setProducts(products.map(p => p.id === id ? { ...p, ...editForm } as Product : p));
+      setEditingId(null);
+    } catch (err) {
+      console.error("Error updating product:", err);
+      alert("Failed to update the product. Check your database permissions.");
+    } finally {
+      setIsProcessing(null);
     }
   };
 
@@ -86,7 +125,7 @@ export function ManageProducts() {
               <th className="px-6 py-4 font-semibold w-40">Category</th>
               <th className="px-6 py-4 font-semibold w-32">Price</th>
               <th className="px-6 py-4 font-semibold w-32">Unit/Weight</th>
-              <th className="px-6 py-4 font-semibold w-32 text-center">Actions</th>
+              <th className="px-6 py-4 font-semibold w-40 text-center">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-secondary/30">
@@ -104,31 +143,108 @@ export function ManageProducts() {
                 </td>
               </tr>
             ) : (
-              products.map((product) => (
-                <tr key={product.id} className="hover:bg-secondary/5 transition group">
-                  <td className="px-6 py-3">
-                    <img src={product.image} alt={product.name} className="w-12 h-12 rounded-md object-cover border border-secondary/50" />
-                  </td>
-                  <td className="px-6 py-3 font-medium text-foreground">{product.name}</td>
-                  <td className="px-6 py-3 text-sm text-muted-foreground">{product.category}</td>
-                  <td className="px-6 py-3 font-semibold text-primary-dark">₹{product.price}</td>
-                  <td className="px-6 py-3 text-sm text-muted-foreground">{product.unit || <span className="italic text-gray-400">None</span>}</td>
-                  <td className="px-6 py-3 text-center">
-                    <button
-                      onClick={() => handleDelete(product.id, product.name)}
-                      disabled={isDeleting === product.id}
-                      className="inline-flex items-center justify-center p-2 rounded-md text-red-600 hover:bg-red-50 hover:text-red-700 transition disabled:opacity-50"
-                      title="Delete Product"
-                    >
-                      {isDeleting === product.id ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
+              products.map((product) => {
+                const isEditing = editingId === product.id;
+                return (
+                  <tr key={product.id} className="hover:bg-secondary/5 transition group">
+                    <td className="px-6 py-3">
+                      <img src={product.image} alt={product.name} className="w-12 h-12 rounded-md object-cover border border-secondary/50" />
+                    </td>
+                    <td className="px-6 py-3">
+                      {isEditing ? (
+                        <input 
+                          type="text" 
+                          value={editForm.name || ""} 
+                          onChange={e => setEditForm({ ...editForm, name: e.target.value })}
+                          className="w-full px-2 py-1 border rounded-md"
+                        />
                       ) : (
-                        <Trash2 className="w-5 h-5" />
+                        <span className="font-medium text-foreground">{product.name}</span>
                       )}
-                    </button>
-                  </td>
-                </tr>
-              ))
+                    </td>
+                    <td className="px-6 py-3">
+                      {isEditing ? (
+                        <input 
+                          type="text" 
+                          value={editForm.category || ""} 
+                          onChange={e => setEditForm({ ...editForm, category: e.target.value })}
+                          className="w-full px-2 py-1 border rounded-md text-sm"
+                        />
+                      ) : (
+                        <span className="text-sm text-muted-foreground">{product.category}</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-3">
+                      {isEditing ? (
+                        <input 
+                          type="number" 
+                          value={editForm.price || ""} 
+                          onChange={e => setEditForm({ ...editForm, price: parseFloat(e.target.value) })}
+                          className="w-full px-2 py-1 border rounded-md font-semibold text-primary-dark"
+                        />
+                      ) : (
+                        <span className="font-semibold text-primary-dark">₹{product.price}</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-3">
+                      {isEditing ? (
+                        <input 
+                          type="text" 
+                          value={editForm.unit || ""} 
+                          onChange={e => setEditForm({ ...editForm, unit: e.target.value })}
+                          className="w-full px-2 py-1 border rounded-md text-sm"
+                          placeholder="e.g. 1 kg"
+                        />
+                      ) : (
+                        <span className="text-sm text-muted-foreground">{product.unit || <span className="italic text-gray-400">None</span>}</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        {isEditing ? (
+                          <>
+                            <button
+                              onClick={() => handleSave(product.id)}
+                              disabled={isProcessing === product.id}
+                              className="p-2 rounded-md text-green-600 hover:bg-green-50 transition"
+                              title="Save"
+                            >
+                              {isProcessing === product.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
+                            </button>
+                            <button
+                              onClick={() => setEditingId(null)}
+                              disabled={isProcessing === product.id}
+                              className="p-2 rounded-md text-gray-500 hover:bg-gray-100 transition"
+                              title="Cancel"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => startEditing(product)}
+                              disabled={isProcessing === product.id}
+                              className="p-2 rounded-md text-blue-600 hover:bg-blue-50 transition disabled:opacity-50"
+                              title="Edit Product"
+                            >
+                              <Pencil className="w-5 h-5" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(product.id, product.name)}
+                              disabled={isProcessing === product.id}
+                              className="p-2 rounded-md text-red-600 hover:bg-red-50 transition disabled:opacity-50"
+                              title="Delete Product"
+                            >
+                              {isProcessing === product.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
