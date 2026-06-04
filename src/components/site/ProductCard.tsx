@@ -21,6 +21,9 @@ export function ProductCard({ product, compact = false, isWholesale = false }: {
           {product.category}
         </p>
         <h3 className="mt-0.5 text-sm font-medium leading-snug line-clamp-2">{product.name}</h3>
+        {product.unit && product.unit !== 'item' && (
+          <p className="text-xs text-muted-foreground mt-0.5 font-medium">{product.unit}</p>
+        )}
         <div className="mt-2 flex items-center justify-between">
           {!isWholesale && <p className="text-base font-semibold text-primary">₹{product.price}</p>}
           {isWholesale && <p className="text-sm font-medium text-muted-foreground mt-1 text-center w-full bg-secondary py-1 rounded-md">View Details</p>}
