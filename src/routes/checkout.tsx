@@ -27,7 +27,7 @@ function Checkout() {
   const [address, setAddress] = useState("");
   const [instructions, setInstructions] = useState("");
   const [gpsLink, setGpsLink] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("COD");
+  const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("ONLINE");
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -304,6 +304,22 @@ function Checkout() {
             <div className="pt-4">
               <h2 className="text-xl font-semibold mb-4 text-primary-dark border-b pb-2">2. Payment Method</h2>
               <div className="space-y-3">
+                <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition ${paymentMethod === 'ONLINE' ? 'border-primary bg-primary/5' : 'hover:bg-secondary/20'}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="ONLINE"
+                    checked={paymentMethod === 'ONLINE'}
+                    onChange={() => setPaymentMethod('ONLINE')}
+                    className="w-4 h-4 text-primary focus:ring-primary"
+                  />
+                  <CreditCard className="w-5 h-5 ml-3 mr-2 text-primary" />
+                  <div className="flex flex-col">
+                    <span className="font-medium text-foreground">Pay Online Securely (Razorpay)</span>
+                    <span className="text-xs text-muted-foreground mt-0.5">UPI, Credit/Debit Cards, NetBanking</span>
+                  </div>
+                </label>
+
                 <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition ${paymentMethod === 'COD' ? 'border-primary bg-primary/5' : 'hover:bg-secondary/20'}`}>
                   <input
                     type="radio"
@@ -316,10 +332,6 @@ function Checkout() {
                   <Truck className="w-5 h-5 ml-3 mr-2 text-primary" />
                   <span className="font-medium text-foreground">Cash on Delivery (COD)</span>
                 </label>
-                <div className="p-3 bg-blue-50 text-blue-800 text-sm rounded-lg border border-blue-100 flex items-start">
-                  <span className="mr-2 mt-0.5">ℹ️</span>
-                  <span>Online Payments are temporarily disabled while we upgrade our systems. Please use Cash on Delivery.</span>
-                </div>
               </div>
             </div>
 
