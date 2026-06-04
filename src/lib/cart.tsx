@@ -1,11 +1,10 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { retailProducts as products } from "./retail-products";
 import type { Product } from "./types";
 
 type CartItem = { product: Product; qty: number };
 type CartCtx = {
   items: CartItem[];
-  add: (id: string) => void;
+  add: (product: Product) => void;
   remove: (id: string) => void;
   setQty: (id: string, qty: number) => void;
   clear: () => void;
@@ -23,14 +22,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       const raw = localStorage.getItem("dp-cart");
       if (raw) {
-        const parsed: { id: string; qty: number }[] = JSON.parse(raw);
-        const hydrated = parsed
-          .map((r) => {
-            const product = products.find((p) => p.id === r.id);
-            return product ? { product, qty: r.qty } : null;
-          })
-          .filter(Boolean) as CartItem[];
-        setItems(hydrated);
+        // We now save the entire items array to localStorage to support dynamic Supabase products
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          const hydrated = parsed.filter(i => i && i.product && i.product.id) as CartItem[];
+          setItems(hydrated);
+        }
       }
     } catch {
       /* noop */
@@ -39,18 +36,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    localStorage.setItem(
-      "dp-cart",
-      JSON.stringify(items.map((i) => ({ id: i.product.id, qty: i.qty }))),
-    );
+    localStorage.setItem("dp-cart", JSON.stringify(items));
   }, [items]);
 
-  const add = (id: string) => {
-    const product = products.find((p) => p.id === id);
+  const add = (product: Product) => {
     if (!product) return;
     setItems((prev) => {
-      const existing = prev.find((i) => i.product.id === id);
-      if (existing) return prev.map((i) => (i.product.id === id ? { ...i, qty: i.qty + 1 } : i));
+      const existing = prev.find((i) => i.product.id === product.id);
+      if (existing) return prev.map((i) => (i.product.id === product.id ? { ...i, qty: i.qty + 1 } : i));
       return [...prev, { product, qty: 1 }];
     });
   };

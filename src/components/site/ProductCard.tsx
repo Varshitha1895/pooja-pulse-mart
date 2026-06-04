@@ -47,7 +47,7 @@ export function ProductCard({ product, compact = false, isWholesale = false }: {
               </div>
             ) : (
               <button
-                onClick={(e) => { e.preventDefault(); add(product.id); }}
+                onClick={(e) => { e.preventDefault(); add(product); }}
                 className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-md border border-accent text-accent hover:bg-accent hover:text-accent-foreground transition"
               >
                 <Plus className="h-3.5 w-3.5" /> ADD

@@ -5,7 +5,9 @@ const products = [...retailProducts, ...wholesaleProducts];
 import { useCart } from "@/lib/cart";
 import { useWholesaleCart } from "@/lib/wholesale-cart";
 import { ShoppingBag, Package, Star, MessageCircle, ChevronRight, Check } from "lucide-react";
-import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import type { Product } from "@/lib/types";
+import { useEffect } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useNavigate } from "@tanstack/react-router";
 import { DivineBackground } from "@/components/site/DivineBackground";
@@ -18,10 +20,44 @@ function ProductDetails() {
   const { productId } = Route.useParams();
   const search: any = useSearch({ strict: false });
   const isWholesale = search.type === 'wholesale';
-  const product = products.find((p) => p.id === productId);
+  
+  const [product, setProduct] = useState<Product | undefined>(products.find((p) => p.id === productId));
+  const [loading, setLoading] = useState(!product);
+  
   const retailCart = useCart();
   const wholesaleCart = useWholesaleCart();
   const [added, setAdded] = useState<'retail' | 'wholesale' | null>(null);
+
+  useEffect(() => {
+    if (!product) {
+      const fetchProduct = async () => {
+        try {
+          const { data, error } = await supabase.from('products').select('*').eq('id', productId).single();
+          if (data && !error) {
+            setProduct({
+              id: data.id,
+              name: data.name,
+              category: data.category,
+              price: Number(data.price),
+              image: data.image_url,
+              catalog: isWholesale ? 'wholesale' : 'retail',
+              unit: data.unit || '1 pack',
+              description: data.description
+            });
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProduct();
+    }
+  }, [productId, product, isWholesale]);
+
+  if (loading) {
+    return <div className="py-32 text-center text-muted-foreground">Loading product details...</div>;
+  }
 
   if (!product) {
     return (
@@ -35,7 +71,7 @@ function ProductDetails() {
   const navigate = useNavigate();
 
   const handleAddRetail = () => {
-    retailCart.add(product.id);
+    retailCart.add(product);
     setAdded('retail');
     setTimeout(() => {
       setAdded(null);
@@ -43,7 +79,7 @@ function ProductDetails() {
   };
 
   const handleAddWholesale = () => {
-    wholesaleCart.add(product.id);
+    wholesaleCart.add(product);
     setAdded('wholesale');
     setTimeout(() => {
       setAdded(null);
