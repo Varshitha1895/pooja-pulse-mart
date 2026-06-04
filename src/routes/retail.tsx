@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { retailProducts as products, categories } from "@/lib/retail-products";
+import { retailProducts as products } from "@/lib/retail-products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart } from "@/lib/cart";
-import { Zap, ShoppingBag } from "lucide-react";
+import { Zap, ShoppingBag, Search } from "lucide-react";
 import shivaImg from "@/assets/gods/shiva.png";
 
 export const Route = createFileRoute("/retail")({
@@ -20,8 +20,12 @@ export const Route = createFileRoute("/retail")({
 });
 
 function Retail() {
-  const [active, setActive] = useState<string>("All");
-  const list = active === "All" ? products : products.filter((p) => p.category === active);
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const list = searchQuery.trim() === "" 
+    ? products 
+    : products.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.category.toLowerCase().includes(searchQuery.toLowerCase()));
+    
   const { count, total } = useCart();
 
   return (
@@ -37,11 +41,11 @@ function Retail() {
         }
       `}</style>
       
-      <div className="relative rounded-2xl bg-[#1a1412] text-white p-8 md:p-12 shadow-2xl overflow-hidden mb-10 group">
+      <div className="relative rounded-2xl bg-[#1a1412] text-white p-8 md:p-12 shadow-2xl overflow-hidden mb-8 group">
         {/* Animated Background Image */}
         <div 
           className="absolute inset-0 z-0 bg-cover bg-[center_top_-2rem] bg-no-repeat opacity-50 animate-divine-pan"
-          style={{ backgroundImage: `url(${shivaImg})` }}
+          style={{ backgroundImage: \`url(\${shivaImg})\` }}
         />
         {/* Gradient Overlay to ensure text readability */}
         <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
@@ -58,32 +62,34 @@ function Retail() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6 md:gap-8 relative z-10">
-        <aside className="md:sticky md:top-24 self-start">
-          <div className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden">
-            <p className="hidden md:block px-4 py-3 bg-white/60 text-xs font-semibold uppercase tracking-wider">
-              Categories
-            </p>
-            <ul className="text-sm flex md:flex-col overflow-x-auto scrollbar-hide">
-              {["All", ...categories].map((c) => (
-                <li key={c} className="shrink-0">
-                  <button
-                    onClick={() => setActive(c)}
-                    className={`w-full text-center md:text-left px-4 py-3 md:py-2.5 border-r md:border-r-0 md:border-t border-border transition whitespace-nowrap ${active === c ? "bg-accent/10 text-accent font-semibold md:border-l-2 md:border-l-accent border-b-2 border-b-accent md:border-b-0" : "hover:bg-secondary"}`}
-                  >
-                    {c}
-                  </button>
-                </li>
-              ))}
-            </ul>
+      <div className="relative z-10 mb-8 max-w-2xl mx-auto">
+        <div className="relative shadow-sm rounded-full overflow-hidden border border-border bg-white/50 backdrop-blur-md">
+          <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-primary/70" />
           </div>
-        </aside>
+          <input
+            type="text"
+            className="block w-full pl-12 pr-6 py-4 bg-transparent text-foreground placeholder-muted-foreground focus:outline-none focus:bg-white/80 transition"
+            placeholder="Search for pooja items..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="relative z-10">
         <section>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
-            {list.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
+          {list.length === 0 ? (
+            <div className="text-center py-20 text-muted-foreground bg-white/30 backdrop-blur-sm rounded-xl border border-white/40">
+              No products found matching "{searchQuery}"
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+              {list.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          )}
         </section>
       </div>
 
@@ -102,4 +108,3 @@ function Retail() {
     </div>
   );
 }
-
