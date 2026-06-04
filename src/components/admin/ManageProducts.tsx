@@ -30,7 +30,8 @@ export function ManageProducts() {
         category: p.category,
         price: Number(p.price),
         image: p.image_url,
-        catalog: 'retail',
+        catalog: p.catalog || 'retail',
+        description: p.description || '',
         unit: p.unit || ''
       }));
       
@@ -73,12 +74,14 @@ export function ManageProducts() {
       category: product.category,
       price: product.price,
       unit: product.unit,
+      catalog: product.catalog,
+      description: product.description,
     });
   };
 
   const handleSave = async (id: string) => {
-    if (!editForm.name || !editForm.category || !editForm.price) {
-      alert("Name, Category, and Price are required.");
+    if (!editForm.name || !editForm.category || (editForm.catalog === 'retail' && editForm.price === undefined)) {
+      alert("Name, Category, and Price are required for retail items.");
       return;
     }
 
@@ -89,8 +92,10 @@ export function ManageProducts() {
         .update({
           name: editForm.name,
           category: editForm.category,
-          price: editForm.price,
+          price: editForm.catalog === 'wholesale' ? 0 : editForm.price,
           unit: editForm.unit,
+          catalog: editForm.catalog,
+          description: editForm.description || null,
         })
         .eq('id', id);
 
@@ -116,29 +121,28 @@ export function ManageProducts() {
         <span className="text-sm font-medium text-muted-foreground">Total: <strong className="text-primary-dark">{products.length}</strong></span>
       </div>
       
-      <div className="overflow-x-auto max-h-[600px]">
-        <table className="w-full text-left border-collapse min-w-[800px]">
-          <thead className="sticky top-0 bg-secondary/30 z-10">
+      <div className="overflow-x-auto max-h-[700px]">
+        <table className="w-full text-left border-collapse min-w-[900px]">
+          <thead className="sticky top-0 bg-secondary/30 z-10 shadow-sm">
             <tr className="text-primary-dark text-sm border-b border-secondary/50">
               <th className="px-6 py-4 font-semibold w-24">Image</th>
-              <th className="px-6 py-4 font-semibold">Product Name</th>
-              <th className="px-6 py-4 font-semibold w-40">Category</th>
+              <th className="px-6 py-4 font-semibold">Product Details</th>
+              <th className="px-6 py-4 font-semibold w-32">Catalog Type</th>
               <th className="px-6 py-4 font-semibold w-32">Price</th>
-              <th className="px-6 py-4 font-semibold w-32">Unit/Weight</th>
-              <th className="px-6 py-4 font-semibold w-40 text-center">Actions</th>
+              <th className="px-6 py-4 font-semibold w-32 text-center">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-secondary/30">
             {isLoading ? (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center">
+                <td colSpan={5} className="px-6 py-12 text-center">
                   <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-2" />
                   <p className="text-muted-foreground">Loading catalog...</p>
                 </td>
               </tr>
             ) : products.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
+                <td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">
                   No products found in the database.
                 </td>
               </tr>
@@ -147,77 +151,118 @@ export function ManageProducts() {
                 const isEditing = editingId === product.id;
                 return (
                   <tr key={product.id} className="hover:bg-secondary/5 transition group">
-                    <td className="px-6 py-3">
-                      <img src={product.image} alt={product.name} className="w-12 h-12 rounded-md object-cover border border-secondary/50" />
+                    <td className="px-6 py-4 align-top">
+                      <img src={product.image} alt={product.name} className="w-16 h-16 rounded-md object-cover border border-secondary/50" />
                     </td>
-                    <td className="px-6 py-3">
+                    <td className="px-6 py-4 align-top">
                       {isEditing ? (
-                        <input 
-                          type="text" 
-                          value={editForm.name || ""} 
-                          onChange={e => setEditForm({ ...editForm, name: e.target.value })}
-                          className="w-full px-2 py-1 border rounded-md"
-                        />
+                        <div className="space-y-2">
+                          <input 
+                            type="text" 
+                            value={editForm.name || ""} 
+                            onChange={e => setEditForm({ ...editForm, name: e.target.value })}
+                            className="w-full px-3 py-1.5 border border-input rounded-md font-medium text-sm"
+                            placeholder="Product Name"
+                          />
+                          <div className="flex gap-2">
+                            <input 
+                              type="text" 
+                              value={editForm.category || ""} 
+                              onChange={e => setEditForm({ ...editForm, category: e.target.value })}
+                              className="w-1/2 px-3 py-1.5 border border-input rounded-md text-sm"
+                              placeholder="Category"
+                            />
+                            <input 
+                              type="text" 
+                              value={editForm.unit || ""} 
+                              onChange={e => setEditForm({ ...editForm, unit: e.target.value })}
+                              className="w-1/2 px-3 py-1.5 border border-input rounded-md text-sm"
+                              placeholder="Unit (e.g. 1 kg)"
+                            />
+                          </div>
+                          <textarea 
+                            value={editForm.description || ""} 
+                            onChange={e => setEditForm({ ...editForm, description: e.target.value })}
+                            className="w-full px-3 py-1.5 border border-input rounded-md text-sm resize-none"
+                            placeholder="Description"
+                            rows={2}
+                          />
+                        </div>
                       ) : (
-                        <span className="font-medium text-foreground">{product.name}</span>
+                        <div>
+                          <div className="font-semibold text-foreground text-base">{product.name}</div>
+                          <div className="text-sm text-muted-foreground mt-0.5">
+                            {product.category} {product.unit && `• ${product.unit}`}
+                          </div>
+                          {product.description && (
+                            <div className="text-xs text-muted-foreground mt-1.5 line-clamp-2 italic">
+                              {product.description}
+                            </div>
+                          )}
+                        </div>
                       )}
                     </td>
-                    <td className="px-6 py-3">
+                    <td className="px-6 py-4 align-top">
                       {isEditing ? (
-                        <input 
-                          type="text" 
-                          value={editForm.category || ""} 
-                          onChange={e => setEditForm({ ...editForm, category: e.target.value })}
-                          className="w-full px-2 py-1 border rounded-md text-sm"
-                        />
+                        <select 
+                          value={editForm.catalog || 'retail'} 
+                          onChange={e => setEditForm({ ...editForm, catalog: e.target.value as any })}
+                          className="w-full px-2 py-1.5 border border-input rounded-md text-sm"
+                        >
+                          <option value="retail">Retail</option>
+                          <option value="wholesale">Wholesale</option>
+                          <option value="both">Both</option>
+                        </select>
                       ) : (
-                        <span className="text-sm text-muted-foreground">{product.category}</span>
+                        <span className={`inline-block text-xs font-bold px-2.5 py-1 rounded-md ${
+                          product.catalog === 'wholesale' ? 'bg-purple-100 text-purple-700 border border-purple-200' : 
+                          product.catalog === 'both' ? 'bg-blue-100 text-blue-700 border border-blue-200' : 
+                          'bg-green-100 text-green-700 border border-green-200'
+                        }`}>
+                          {product.catalog?.toUpperCase() || 'RETAIL'}
+                        </span>
                       )}
                     </td>
-                    <td className="px-6 py-3">
+                    <td className="px-6 py-4 align-top">
                       {isEditing ? (
-                        <input 
-                          type="number" 
-                          value={editForm.price || ""} 
-                          onChange={e => setEditForm({ ...editForm, price: parseFloat(e.target.value) })}
-                          className="w-full px-2 py-1 border rounded-md font-semibold text-primary-dark"
-                        />
+                        editForm.catalog !== 'wholesale' ? (
+                          <div className="relative">
+                            <span className="absolute left-3 top-1.5 text-muted-foreground text-sm">₹</span>
+                            <input 
+                              type="number" 
+                              value={editForm.price || ""} 
+                              onChange={e => setEditForm({ ...editForm, price: parseFloat(e.target.value) })}
+                              className="w-full pl-6 pr-2 py-1.5 border border-input rounded-md font-semibold text-primary-dark text-sm"
+                            />
+                          </div>
+                        ) : (
+                          <span className="text-sm text-muted-foreground italic px-2 py-1.5 inline-block">N/A</span>
+                        )
                       ) : (
-                        <span className="font-semibold text-primary-dark">₹{product.price}</span>
+                        <span className="font-bold text-primary-dark text-base">
+                          {product.catalog === 'wholesale' ? 'Quote' : `₹${product.price}`}
+                        </span>
                       )}
                     </td>
-                    <td className="px-6 py-3">
-                      {isEditing ? (
-                        <input 
-                          type="text" 
-                          value={editForm.unit || ""} 
-                          onChange={e => setEditForm({ ...editForm, unit: e.target.value })}
-                          className="w-full px-2 py-1 border rounded-md text-sm"
-                          placeholder="e.g. 1 kg"
-                        />
-                      ) : (
-                        <span className="text-sm text-muted-foreground">{product.unit || <span className="italic text-gray-400">None</span>}</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-3">
-                      <div className="flex items-center justify-center gap-2">
+                    <td className="px-6 py-4 align-top text-center">
+                      <div className="flex items-center justify-center gap-1.5">
                         {isEditing ? (
                           <>
                             <button
                               onClick={() => handleSave(product.id)}
                               disabled={isProcessing === product.id}
-                              className="p-2 rounded-md text-green-600 hover:bg-green-50 transition"
+                              className="p-1.5 rounded-md text-green-600 hover:bg-green-50 transition border border-transparent hover:border-green-200"
                               title="Save"
                             >
-                              {isProcessing === product.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
+                              {isProcessing === product.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                             </button>
                             <button
                               onClick={() => setEditingId(null)}
                               disabled={isProcessing === product.id}
-                              className="p-2 rounded-md text-gray-500 hover:bg-gray-100 transition"
+                              className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition border border-transparent hover:border-gray-200"
                               title="Cancel"
                             >
-                              <X className="w-5 h-5" />
+                              <X className="w-4 h-4" />
                             </button>
                           </>
                         ) : (
@@ -225,18 +270,18 @@ export function ManageProducts() {
                             <button
                               onClick={() => startEditing(product)}
                               disabled={isProcessing === product.id}
-                              className="p-2 rounded-md text-blue-600 hover:bg-blue-50 transition disabled:opacity-50"
+                              className="p-1.5 rounded-md text-blue-600 hover:bg-blue-50 transition border border-transparent hover:border-blue-200 disabled:opacity-50"
                               title="Edit Product"
                             >
-                              <Pencil className="w-5 h-5" />
+                              <Pencil className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDelete(product.id, product.name)}
                               disabled={isProcessing === product.id}
-                              className="p-2 rounded-md text-red-600 hover:bg-red-50 transition disabled:opacity-50"
+                              className="p-1.5 rounded-md text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-200 disabled:opacity-50"
                               title="Delete Product"
                             >
-                              {isProcessing === product.id ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
+                              {isProcessing === product.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                             </button>
                           </>
                         )}
