@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { retailProducts as products } from "@/lib/retail-products";
+import { useState, useEffect } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart } from "@/lib/cart";
-import { Zap, ShoppingBag, Search } from "lucide-react";
+import { Zap, ShoppingBag, Search, Loader2 } from "lucide-react";
 import shivaImg from "@/assets/gods/shiva.png";
+import { supabase } from "@/lib/supabase";
+import type { Product } from "@/lib/types";
 
 export const Route = createFileRoute("/retail")({
   head: () => ({
@@ -21,6 +22,39 @@ export const Route = createFileRoute("/retail")({
 
 function Retail() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: true });
+          
+        if (error) throw error;
+        
+        const formattedProducts: Product[] = (data || []).map(p => ({
+          id: p.id,
+          name: p.name,
+          category: p.category,
+          price: Number(p.price),
+          image: p.image_url,
+          catalog: 'retail',
+          unit: 'item'
+        }));
+        
+        setProducts(formattedProducts);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchProducts();
+  }, []);
   
   const list = searchQuery.trim() === "" 
     ? products 
@@ -79,7 +113,12 @@ function Retail() {
 
       <div className="relative z-10">
         <section>
-          {list.length === 0 ? (
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+              <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+              <p className="text-lg font-medium">Loading products...</p>
+            </div>
+          ) : list.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground bg-white/30 backdrop-blur-sm rounded-xl border border-white/40">
               No products found matching "{searchQuery}"
             </div>
