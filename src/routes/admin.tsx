@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Loader2, Package, RefreshCw, Phone, MapPin, Calendar, CreditCard, LogOut, LockKeyhole, PlusCircle, ListOrdered } from "lucide-react";
+import { Loader2, Package, RefreshCw, Phone, MapPin, Calendar, CreditCard, LogOut, LockKeyhole, PlusCircle, ListOrdered, Grid } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import { AddProduct } from "@/components/admin/AddProduct";
+import { ManageProducts } from "@/components/admin/ManageProducts";
 
 export const Route = createFileRoute("/admin")({
   component: AdminWrapper,
@@ -155,7 +156,7 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"orders" | "add-product">("orders");
+  const [activeTab, setActiveTab] = useState<"orders" | "add-product" | "manage-products">("orders");
 
   const fetchOrders = async () => {
     setIsLoading(true);
@@ -264,20 +265,27 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
             <p className="text-muted-foreground mt-1">Manage your store orders and catalog</p>
           </div>
           
-          <div className="flex bg-secondary/30 p-1 rounded-lg border border-secondary/50">
+          <div className="flex bg-secondary/30 p-1 rounded-lg border border-secondary/50 overflow-x-auto">
             <button
               onClick={() => setActiveTab("orders")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition ${activeTab === "orders" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "orders" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
             >
               <ListOrdered className="w-4 h-4" />
               Orders
             </button>
             <button
               onClick={() => setActiveTab("add-product")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition ${activeTab === "add-product" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "add-product" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
             >
               <PlusCircle className="w-4 h-4" />
               Add Product
+            </button>
+            <button
+              onClick={() => setActiveTab("manage-products")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "manage-products" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              <Grid className="w-4 h-4" />
+              Manage Catalog
             </button>
           </div>
         </div>
@@ -402,10 +410,12 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
             </table>
           </div>
         </div>
-        ) : (
+        ) : activeTab === "add-product" ? (
           <div className="flex justify-center">
             <AddProduct />
           </div>
+        ) : (
+          <ManageProducts />
         )}
       </main>
     </div>
