@@ -42,7 +42,7 @@ function Retail() {
           price: Number(p.price),
           image: p.image_url,
           catalog: 'retail',
-          unit: 'item'
+          unit: p.unit || 'item'
         }));
         
         setProducts(formattedProducts);

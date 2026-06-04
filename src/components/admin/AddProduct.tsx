@@ -6,6 +6,7 @@ export function AddProduct() {
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [unit, setUnit] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -16,7 +17,7 @@ export function AddProduct() {
     setError("");
     setSuccess(false);
 
-    if (!category || !name || !price || !file) {
+    if (!category || !name || !price || !unit || !file) {
       setError("Please fill all fields and select an image.");
       return;
     }
@@ -48,6 +49,7 @@ export function AddProduct() {
             category,
             name,
             price: parseFloat(price),
+            unit: unit,
             image_url: publicUrl,
           }
         ]);
@@ -59,6 +61,7 @@ export function AddProduct() {
       setCategory("");
       setName("");
       setPrice("");
+      setUnit("");
       setFile(null);
       // reset file input visually
       const fileInput = document.getElementById("product-image") as HTMLInputElement;
@@ -129,6 +132,18 @@ export function AddProduct() {
             onChange={(e) => setPrice(e.target.value)}
             className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
             placeholder="e.g. 150"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Unit / Weight</label>
+          <input
+            type="text"
+            required
+            value={unit}
+            onChange={(e) => setUnit(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+            placeholder="e.g. 1 kg, 500 grams, 1 pack"
           />
         </div>
 
