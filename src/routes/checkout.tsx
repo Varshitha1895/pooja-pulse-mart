@@ -8,6 +8,16 @@ export const Route = createFileRoute("/checkout")({
   component: Checkout,
 });
 
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 function Checkout() {
   const { items, total, clear } = useCart();
   const navigate = useNavigate();
@@ -17,7 +27,7 @@ function Checkout() {
   const [address, setAddress] = useState("");
   const [instructions, setInstructions] = useState("");
   const [gpsLink, setGpsLink] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<"COD" | "UPI">("COD");
+  const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("ONLINE");
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -46,7 +56,7 @@ function Checkout() {
         <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
         <p className="text-muted-foreground mb-6">Add some items to your cart to checkout.</p>
         <Link
-          to="/products"
+          to="/retail"
           className="bg-primary text-primary-foreground px-6 py-3 rounded-md font-semibold hover:bg-primary/90 transition"
         >
           Browse Products
@@ -75,6 +85,106 @@ function Checkout() {
     );
   }
 
+  const handleOnlinePayment = async (orderId: string) => {
+    const isLoaded = await loadRazorpayScript();
+    
+    if (!isLoaded) {
+      alert("Failed to load Razorpay SDK. Please check your connection.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      // Create order on backend
+      const response = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: total, receipt: orderId }),
+      });
+
+      const order = await response.json();
+
+      if (!response.ok) {
+        throw new Error(order.error || "Failed to create payment order");
+      }
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "", // Fallback will fail cleanly if not set
+        amount: order.amount,
+        currency: order.currency,
+        name: "Divine Hub",
+        description: "Pooja Essentials",
+        order_id: order.id,
+        handler: async function (response: any) {
+          try {
+            // Verify payment
+            const verifyRes = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+            
+            const verifyData = await verifyRes.json();
+            
+            if (verifyData.success) {
+              // Update order in Supabase
+              await supabase.from("orders").update({
+                payment_status: "Paid",
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id
+              }).eq("id", orderId);
+              
+              clear();
+              setIsSuccess(true);
+            } else {
+              alert("Payment verification failed. If money was deducted, it will be refunded.");
+              await supabase.from("orders").update({ payment_status: "Failed" }).eq("id", orderId);
+            }
+          } catch (err) {
+            console.error("Verification error:", err);
+            alert("Payment verification error.");
+          } finally {
+            setIsSubmitting(false);
+          }
+        },
+        prefill: {
+          name: name,
+          contact: phone,
+        },
+        theme: {
+          color: "#b07c2a",
+        },
+        modal: {
+          ondismiss: function () {
+            setIsSubmitting(false);
+            // Optionally update order status to abandoned
+          }
+        }
+      };
+
+      // @ts-ignore
+      const rzp = new window.Razorpay(options);
+      
+      rzp.on('payment.failed', async function (response: any) {
+        console.error("Payment Failed", response.error);
+        alert(response.error.description);
+        await supabase.from("orders").update({ payment_status: "Failed" }).eq("id", orderId);
+        setIsSubmitting(false);
+      });
+
+      rzp.open();
+      
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message || "Failed to initialize payment.");
+      setIsSubmitting(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone || !address) return;
@@ -88,12 +198,13 @@ function Checkout() {
         address,
         delivery_instructions: [instructions, gpsLink ? `GPS: ${gpsLink}` : null].filter(Boolean).join("\n\n"),
         total_amount: total,
-        payment_method: paymentMethod,
-        status: paymentMethod === "COD" ? "Pending" : "Pending Payment",
+        payment_method: paymentMethod === "COD" ? "COD" : "Razorpay",
+        payment_status: "Pending",
+        status: "Pending",
         items: items.map(i => ({ id: i.product.id, name: i.product.name, qty: i.qty, price: i.product.price }))
       };
 
-      const { error } = await supabase.from("orders").insert([orderData]);
+      const { data, error } = await supabase.from("orders").insert([orderData]).select().single();
 
       if (error) {
         console.error("Error inserting order:", error);
@@ -102,14 +213,16 @@ function Checkout() {
         return;
       }
 
-      clear();
-      setIsSuccess(true);
+      const orderId = data.id;
 
-      if (paymentMethod === "UPI") {
-        // Trigger UPI Intent deep link
-        const upiUrl = `upi://pay?pa=merchant@ybl&pn=PoojaPulseMart&am=${total}&cu=INR`;
-        window.location.href = upiUrl;
+      if (paymentMethod === "ONLINE") {
+        await handleOnlinePayment(orderId);
+      } else {
+        clear();
+        setIsSuccess(true);
+        setIsSubmitting(false);
       }
+      
     } catch (err) {
       console.error("Unexpected error:", err);
       alert("Something went wrong. Please try again.");
@@ -191,6 +304,22 @@ function Checkout() {
             <div className="pt-4">
               <h2 className="text-xl font-semibold mb-4 text-primary-dark border-b pb-2">2. Payment Method</h2>
               <div className="space-y-3">
+                <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition ${paymentMethod === 'ONLINE' ? 'border-primary bg-primary/5' : 'hover:bg-secondary/20'}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="ONLINE"
+                    checked={paymentMethod === 'ONLINE'}
+                    onChange={() => setPaymentMethod('ONLINE')}
+                    className="w-4 h-4 text-primary focus:ring-primary"
+                  />
+                  <CreditCard className="w-5 h-5 ml-3 mr-2 text-primary" />
+                  <div className="flex flex-col">
+                    <span className="font-medium text-foreground">Pay Online Securely (Razorpay)</span>
+                    <span className="text-xs text-muted-foreground mt-0.5">UPI, Credit/Debit Cards, NetBanking</span>
+                  </div>
+                </label>
+
                 <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition ${paymentMethod === 'COD' ? 'border-primary bg-primary/5' : 'hover:bg-secondary/20'}`}>
                   <input
                     type="radio"
@@ -202,22 +331,6 @@ function Checkout() {
                   />
                   <Truck className="w-5 h-5 ml-3 mr-2 text-primary" />
                   <span className="font-medium text-foreground">Cash on Delivery (COD)</span>
-                </label>
-
-                <label className={`flex items-center p-4 border rounded-lg cursor-pointer transition ${paymentMethod === 'UPI' ? 'border-primary bg-primary/5' : 'hover:bg-secondary/20'}`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="UPI"
-                    checked={paymentMethod === 'UPI'}
-                    onChange={() => setPaymentMethod('UPI')}
-                    className="w-4 h-4 text-primary focus:ring-primary"
-                  />
-                  <CreditCard className="w-5 h-5 ml-3 mr-2 text-primary" />
-                  <div className="flex flex-col">
-                    <span className="font-medium text-foreground">Pay Online (PhonePe / UPI / GPay)</span>
-                    <span className="text-xs text-muted-foreground mt-0.5">Secure payment via UPI app</span>
-                  </div>
                 </label>
               </div>
             </div>
@@ -278,4 +391,3 @@ function Checkout() {
     </div>
   );
 }
-
