@@ -45,7 +45,7 @@ function Retail() {
         {/* Animated Background Image */}
         <div 
           className="absolute inset-0 z-0 bg-cover bg-[center_top_-2rem] bg-no-repeat opacity-50 animate-divine-pan"
-          style={{ backgroundImage: \`url(\${shivaImg})\` }}
+          style={{ backgroundImage: `url(${shivaImg})` }}
         />
         {/* Gradient Overlay to ensure text readability */}
         <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
