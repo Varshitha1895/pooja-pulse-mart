@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Loader2, Package, RefreshCw, Phone, MapPin, Calendar, CreditCard, LogOut, LockKeyhole } from "lucide-react";
+import { Loader2, Package, RefreshCw, Phone, MapPin, Calendar, CreditCard, LogOut, LockKeyhole, PlusCircle, ListOrdered } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
+import { AddProduct } from "@/components/admin/AddProduct";
 
 export const Route = createFileRoute("/admin")({
   component: AdminWrapper,
@@ -154,6 +155,7 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"orders" | "add-product">("orders");
 
   const fetchOrders = async () => {
     setIsLoading(true);
@@ -256,20 +258,37 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-end mb-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-primary-dark">Retail Orders</h2>
-            <p className="text-muted-foreground mt-1">Manage and track your customer orders</p>
+            <h2 className="text-2xl font-bold text-primary-dark">Admin Control Panel</h2>
+            <p className="text-muted-foreground mt-1">Manage your store orders and catalog</p>
           </div>
-          <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-secondary/30">
-            <span className="text-sm font-medium text-muted-foreground">Total Orders: </span>
-            <span className="text-lg font-bold text-primary-dark">{orders.length}</span>
+          
+          <div className="flex bg-secondary/30 p-1 rounded-lg border border-secondary/50">
+            <button
+              onClick={() => setActiveTab("orders")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition ${activeTab === "orders" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              <ListOrdered className="w-4 h-4" />
+              Orders
+            </button>
+            <button
+              onClick={() => setActiveTab("add-product")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition ${activeTab === "add-product" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              <PlusCircle className="w-4 h-4" />
+              Add Product
+            </button>
           </div>
         </div>
 
-        {/* Orders Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-secondary/50 overflow-hidden">
-          <div className="overflow-x-auto">
+        {activeTab === "orders" ? (
+          /* Orders Table */
+          <div className="bg-white rounded-xl shadow-sm border border-secondary/50 overflow-hidden">
+            <div className="flex justify-between items-center p-4 border-b border-secondary/50 bg-secondary/10">
+              <span className="text-sm font-medium text-muted-foreground">Total Orders: <strong className="text-primary-dark">{orders.length}</strong></span>
+            </div>
+            <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[1000px]">
               <thead>
                 <tr className="bg-secondary/30 text-primary-dark text-sm border-b border-secondary/50">
@@ -383,6 +402,11 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
             </table>
           </div>
         </div>
+        ) : (
+          <div className="flex justify-center">
+            <AddProduct />
+          </div>
+        )}
       </main>
     </div>
   );
