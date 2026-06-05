@@ -39,6 +39,7 @@ export function ManageProducts({ catalogType }: { catalogType: 'retail' | 'whole
             price: Number(p.price),
             image: p.image_url,
             catalog: parsedCatalog,
+            description: p.description || '',
             unit: p.unit || ''
           };
         })
@@ -82,13 +83,18 @@ export function ManageProducts({ catalogType }: { catalogType: 'retail' | 'whole
       name: product.name,
       category: product.category,
       price: product.price,
+      description: product.description,
       unit: product.unit,
     });
   };
 
   const handleSave = async (id: string) => {
-    if (!editForm.name || !editForm.category || !editForm.price) {
-      alert("Name, Category, and Price are required.");
+    if (!editForm.name || !editForm.category) {
+      alert("Name and Category are required.");
+      return;
+    }
+    if (catalogType === 'retail' && editForm.price === undefined) {
+      alert("Price is required for retail products.");
       return;
     }
 
@@ -99,7 +105,8 @@ export function ManageProducts({ catalogType }: { catalogType: 'retail' | 'whole
         .update({
           name: editForm.name,
           category: `[${catalogType}] ${editForm.category}`,
-          price: editForm.price,
+          price: editForm.price !== undefined ? editForm.price : 0,
+          description: editForm.description,
           unit: editForm.unit,
         })
         .eq('id', id);
@@ -133,7 +140,7 @@ export function ManageProducts({ catalogType }: { catalogType: 'retail' | 'whole
               <th className="px-6 py-4 font-semibold w-24">Image</th>
               <th className="px-6 py-4 font-semibold">Product Name</th>
               <th className="px-6 py-4 font-semibold w-40">Category</th>
-              <th className="px-6 py-4 font-semibold w-32">Price</th>
+              <th className="px-6 py-4 font-semibold w-32">{catalogType === 'retail' ? 'Price' : 'Description'}</th>
               <th className="px-6 py-4 font-semibold w-32">Unit/Weight</th>
               <th className="px-6 py-4 font-semibold w-40 text-center">Actions</th>
             </tr>
@@ -186,14 +193,27 @@ export function ManageProducts({ catalogType }: { catalogType: 'retail' | 'whole
                     </td>
                     <td className="px-6 py-3">
                       {isEditing ? (
-                        <input 
-                          type="number" 
-                          value={editForm.price || ""} 
-                          onChange={e => setEditForm({ ...editForm, price: parseFloat(e.target.value) })}
-                          className="w-full px-2 py-1 border rounded-md font-semibold text-primary-dark"
-                        />
+                        catalogType === 'retail' ? (
+                          <input 
+                            type="number" 
+                            value={editForm.price || ""} 
+                            onChange={e => setEditForm({ ...editForm, price: parseFloat(e.target.value) })}
+                            className="w-full px-2 py-1 border rounded-md font-semibold text-primary-dark"
+                          />
+                        ) : (
+                          <textarea
+                            value={editForm.description || ""}
+                            onChange={e => setEditForm({ ...editForm, description: e.target.value })}
+                            className="w-full px-2 py-1 border rounded-md text-sm resize-none"
+                            rows={2}
+                          />
+                        )
                       ) : (
-                        <span className="font-semibold text-primary-dark">₹{product.price}</span>
+                        catalogType === 'retail' ? (
+                          <span className="font-semibold text-primary-dark">₹{product.price}</span>
+                        ) : (
+                          <span className="text-sm text-muted-foreground line-clamp-2">{product.description || "No description"}</span>
+                        )
                       )}
                     </td>
                     <td className="px-6 py-3">

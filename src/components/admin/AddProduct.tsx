@@ -6,6 +6,7 @@ export function AddProduct({ catalogType }: { catalogType: 'retail' | 'wholesale
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
   const [unit, setUnit] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,8 +18,16 @@ export function AddProduct({ catalogType }: { catalogType: 'retail' | 'wholesale
     setError("");
     setSuccess(false);
 
-    if (!category || !name || !price || !unit || !file) {
-      setError("Please fill all fields and select an image.");
+    if (!category || !name || !unit || !file) {
+      setError("Please fill all required fields and select an image.");
+      return;
+    }
+    if (catalogType === 'retail' && !price) {
+      setError("Price is required for retail products.");
+      return;
+    }
+    if (catalogType === 'wholesale' && !description) {
+      setError("Description is required for wholesale products.");
       return;
     }
 
@@ -48,7 +57,8 @@ export function AddProduct({ catalogType }: { catalogType: 'retail' | 'wholesale
           {
             category: `[${catalogType}] ${category}`,
             name,
-            price: parseFloat(price),
+            price: catalogType === 'retail' ? parseFloat(price) : 0,
+            description: catalogType === 'wholesale' ? description : '',
             unit: unit,
             image_url: publicUrl,
           }
@@ -61,6 +71,7 @@ export function AddProduct({ catalogType }: { catalogType: 'retail' | 'wholesale
       setCategory("");
       setName("");
       setPrice("");
+      setDescription("");
       setUnit("");
       setFile(null);
       // reset file input visually
@@ -121,19 +132,32 @@ export function AddProduct({ catalogType }: { catalogType: 'retail' | 'wholesale
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Price (₹)</label>
-          <input
-            type="number"
-            required
-            min="0"
-            step="0.01"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-            placeholder="e.g. 150"
-          />
-        </div>
+        {catalogType === 'retail' ? (
+          <div>
+            <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Price (₹)</label>
+            <input
+              type="number"
+              required
+              min="0"
+              step="0.01"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+              placeholder="e.g. 150"
+            />
+          </div>
+        ) : (
+          <div>
+            <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Description</label>
+            <textarea
+              required
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition resize-none h-24"
+              placeholder="e.g. Premium quality, best for bulk orders."
+            />
+          </div>
+        )}
 
         <div>
           <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Unit / Weight</label>
