@@ -4,7 +4,10 @@ import { ArrowRight, Truck, ShieldCheck, Zap, ChevronRight, Package } from "luci
 import hero from "@/assets/hero-pooja.jpg";
 import muralBgRealistic from "@/assets/rama-sita-realistic.png";
 import { DivinePetals } from "@/components/site/DivinePetals";
-import { retailProducts as products } from "@/lib/retail-products";
+import { retailProducts as staticProducts } from "@/lib/retail-products";
+import { supabase } from "@/lib/supabase";
+import type { Product } from "@/lib/types";
+import { useEffect, useState } from "react";
 import ganeshaImg from "@/assets/gods/ganesha.png";
 import krishnaImg from "@/assets/gods/krishna.png";
 
@@ -24,7 +27,42 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const scroller = useRef<HTMLDivElement>(null);
-  const featured = products.slice(0, 8);
+  const [featured, setFeatured] = useState<Product[]>(staticProducts.slice(0, 8));
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(8);
+          
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          const formattedProducts: Product[] = data.map(p => ({
+            id: p.id,
+            name: p.name,
+            category: p.category,
+            price: Number(p.price),
+            image: p.image_url,
+            catalog: p.catalog || 'retail',
+            description: p.description || '',
+            unit: p.unit || '1 pack'
+          })).filter(p => p.catalog === 'retail' || p.catalog === 'both');
+          
+          if (formattedProducts.length > 0) {
+            setFeatured(formattedProducts.slice(0, 8));
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching featured products:", err);
+      }
+    }
+    
+    fetchProducts();
+  }, []);
 
   return (
     <>
