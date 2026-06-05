@@ -4,7 +4,6 @@ import { Package, Loader2 } from "lucide-react";
 import { useWholesaleCart } from "@/lib/wholesale-cart";
 import { supabase } from "@/lib/supabase";
 import type { Product } from "@/lib/types";
-import { ProductCard } from "@/components/site/ProductCard";
 import shivaImg from "@/assets/gods/shiva.png";
 
 export const Route = createFileRoute("/wholesale")({
@@ -118,7 +117,29 @@ function Wholesale() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
           {products.map((p) => (
-            <ProductCard key={p.id} product={p} isWholesale={true} />
+            <div
+              key={p.id}
+              className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-warm transition flex flex-col group"
+            >
+              <div className="aspect-[4/3] bg-gradient-warm overflow-hidden relative">
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-5 flex-1 flex flex-col justify-end">
+                <Link
+                  to={`/product/$productId`}
+                  params={{ productId: p.id }}
+                  search={{ type: 'wholesale' }}
+                  className="mt-4 inline-flex items-center justify-center w-full bg-secondary text-foreground font-semibold py-2.5 rounded-md hover:bg-secondary/80 transition"
+                >
+                  View Details
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
       )}
