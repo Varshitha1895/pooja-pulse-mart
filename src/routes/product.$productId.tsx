@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import type { Product } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
-import { useNavigate } from "@tanstack/react-router";
+
 import { DivineBackground } from "@/components/site/DivineBackground";
 
 export const Route = createFileRoute("/product/$productId")({
@@ -83,7 +83,6 @@ function ProductDetails() {
     );
   }
 
-  const navigate = useNavigate();
 
   const handleAddRetail = () => {
     retailCart.add(product);
