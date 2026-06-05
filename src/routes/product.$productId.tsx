@@ -7,7 +7,7 @@ import { useWholesaleCart } from "@/lib/wholesale-cart";
 import { ShoppingBag, Package, Star, MessageCircle, ChevronRight, Check } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import type { Product } from "@/lib/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useNavigate } from "@tanstack/react-router";
 import { DivineBackground } from "@/components/site/DivineBackground";
