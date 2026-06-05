@@ -26,6 +26,55 @@ function ProductDetails() {
   const retailCart = useCart();
   const wholesaleCart = useWholesaleCart();
   const [added, setAdded] = useState<'retail' | 'wholesale' | null>(null);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [comments, setComments] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedbacks, setFeedbacks] = useState<any[]>([]);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  useEffect(() => {
+    async function fetchFeedbacks() {
+      if (productId) {
+        const { data } = await supabase
+          .from('feedbacks')
+          .select('*')
+          .eq('product_id', productId)
+          .order('created_at', { ascending: false });
+        if (data) setFeedbacks(data);
+      }
+    }
+    fetchFeedbacks();
+  }, [productId]);
+
+  const handleFeedbackSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (rating === 0) return alert('Please select a rating');
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('feedbacks').insert({
+        product_id: productId,
+        rating,
+        comments
+      });
+      if (error) throw error;
+      setHasSubmitted(true);
+      setShowFeedbackForm(false);
+      // Refresh feedbacks
+      const { data } = await supabase
+        .from('feedbacks')
+        .select('*')
+        .eq('product_id', productId)
+        .order('created_at', { ascending: false });
+      if (data) setFeedbacks(data);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to submit feedback');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -234,30 +283,120 @@ function ProductDetails() {
 
         {/* Customer Feedback */}
         <div className="mt-8 bg-background rounded-2xl shadow-sm border border-border p-6 md:p-8">
-          <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-accent" /> Customer Devotion & Feedback
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-accent" /> Customer Devotion & Feedback
+            </h2>
+            {!showFeedbackForm && !hasSubmitted && (
+              <button 
+                onClick={() => setShowFeedbackForm(true)}
+                className="text-sm font-bold text-primary hover:underline"
+              >
+                Write a Review
+              </button>
+            )}
+          </div>
+
+          {showFeedbackForm && (
+            <div className="mb-8 bg-secondary/10 p-5 rounded-xl border border-secondary/30">
+              <h3 className="font-bold text-foreground mb-4">Leave your feedback</h3>
+              <form onSubmit={handleFeedbackSubmit}>
+                <div className="mb-4">
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onMouseEnter={() => setHoverRating(star)}
+                        onMouseLeave={() => setHoverRating(0)}
+                        onClick={() => setRating(star)}
+                      >
+                        <Star 
+                          className={`w-8 h-8 transition-colors ${
+                            (hoverRating || rating) >= star 
+                              ? "fill-yellow-400 text-yellow-400" 
+                              : "text-gray-300"
+                          }`} 
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  value={comments}
+                  onChange={e => setComments(e.target.value)}
+                  placeholder="Share your experience with this product..."
+                  className="w-full p-3 rounded-lg border border-input mb-4 focus:ring-1 focus:ring-primary outline-none text-sm"
+                  rows={3}
+                />
+                <div className="flex gap-3">
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-semibold text-sm hover:opacity-90 disabled:opacity-70"
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit Review'}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setShowFeedbackForm(false)}
+                    className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {hasSubmitted && (
+            <div className="mb-8 bg-green-50 p-4 rounded-xl border border-green-100 text-green-700 text-sm font-medium flex items-center gap-2">
+              <Check className="w-5 h-5" /> Thank you for your feedback!
+            </div>
+          )}
+
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-muted/10 p-5 rounded-xl border border-border">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="flex text-accent">
-                  <Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" />
+            {feedbacks.length > 0 ? (
+              feedbacks.map(fb => (
+                <div key={fb.id} className="bg-muted/10 p-5 rounded-xl border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="flex text-accent">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className={`h-4 w-4 ${i < fb.rating ? 'fill-accent' : 'text-gray-300'}`} />
+                      ))}
+                    </div>
+                    <span className="text-xs font-bold text-muted-foreground">
+                      {new Date(fb.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                  {fb.comments && <p className="text-sm italic text-foreground mb-3">"{fb.comments}"</p>}
+                  <p className="text-xs font-bold text-muted-foreground">— Verified Buyer</p>
                 </div>
-                <span className="text-xs font-bold text-muted-foreground">2 days ago</span>
-              </div>
-              <p className="text-sm italic text-foreground mb-3">"The purity of this {product.category.toLowerCase()} is unmatched. It truly elevates our daily pooja. Highly recommend!"</p>
-              <p className="text-xs font-bold text-muted-foreground">— Rajesh K.</p>
-            </div>
-            <div className="bg-muted/10 p-5 rounded-xl border border-border">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="flex text-accent">
-                  <Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" />
+              ))
+            ) : (
+              <>
+                <div className="bg-muted/10 p-5 rounded-xl border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="flex text-accent">
+                      <Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" />
+                    </div>
+                    <span className="text-xs font-bold text-muted-foreground">2 days ago</span>
+                  </div>
+                  <p className="text-sm italic text-foreground mb-3">"The purity of this {product.category.toLowerCase()} is unmatched. It truly elevates our daily pooja. Highly recommend!"</p>
+                  <p className="text-xs font-bold text-muted-foreground">— Rajesh K.</p>
                 </div>
-                <span className="text-xs font-bold text-muted-foreground">1 week ago</span>
-              </div>
-              <p className="text-sm italic text-foreground mb-3">"Excellent packaging and exactly as described. The aroma fills the entire house with positivity."</p>
-              <p className="text-xs font-bold text-muted-foreground">— Sunita M.</p>
-            </div>
+                <div className="bg-muted/10 p-5 rounded-xl border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="flex text-accent">
+                      <Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" /><Star className="h-4 w-4 fill-accent" />
+                    </div>
+                    <span className="text-xs font-bold text-muted-foreground">1 week ago</span>
+                  </div>
+                  <p className="text-sm italic text-foreground mb-3">"Excellent packaging and exactly as described. The aroma fills the entire house with positivity."</p>
+                  <p className="text-xs font-bold text-muted-foreground">— Sunita M.</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

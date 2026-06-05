@@ -196,19 +196,6 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
       } else {
         // Update local state
         setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-        
-        if (newStatus === "Delivered") {
-          const order = orders.find(o => o.id === orderId);
-          if (order && order.phone) {
-            const feedbackUrl = `${window.location.origin}/feedback/${order.id}`;
-            const message = `Namaste ${order.customer_name},\n\nYour order from Divine Hub has been successfully delivered! 🙏\n\nWe would love to hear your feedback. Please click the link below to share your experience:\n${feedbackUrl}\n\nThank you for choosing us!`;
-            const encodedMessage = encodeURIComponent(message);
-            const cleanPhone = order.phone.replace(/[^0-9]/g, '');
-            const formattedPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
-            const waUrl = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
-            window.open(waUrl, '_blank');
-          }
-        }
       }
     } catch (err) {
       console.error("Unexpected error:", err);
