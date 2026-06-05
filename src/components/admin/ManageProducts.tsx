@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { Loader2, Trash2, Package, Pencil, Check, X } from "lucide-react";
 import type { Product } from "@/lib/types";
 
-export function ManageProducts() {
+export function ManageProducts({ catalogType }: { catalogType: 'retail' | 'wholesale' }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
@@ -12,7 +12,7 @@ export function ManageProducts() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [catalogType]);
 
   const fetchProducts = async () => {
     setIsLoading(true);
@@ -24,15 +24,17 @@ export function ManageProducts() {
         
       if (error) throw error;
       
-      const formattedProducts: Product[] = (data || []).map(p => ({
-        id: p.id,
-        name: p.name,
-        category: p.category,
-        price: Number(p.price),
-        image: p.image_url,
-        catalog: 'retail',
-        unit: p.unit || ''
-      }));
+      const formattedProducts: Product[] = (data || [])
+        .filter(p => p.catalog === catalogType)
+        .map(p => ({
+          id: p.id,
+          name: p.name,
+          category: p.category,
+          price: Number(p.price),
+          image: p.image_url,
+          catalog: p.catalog || 'retail',
+          unit: p.unit || ''
+        }));
       
       setProducts(formattedProducts);
     } catch (err) {
@@ -111,7 +113,7 @@ export function ManageProducts() {
       <div className="flex justify-between items-center p-4 border-b border-secondary/50 bg-secondary/10">
         <h3 className="font-semibold text-primary-dark flex items-center gap-2">
           <Package className="w-5 h-5" />
-          Manage Catalog
+          Manage {catalogType === 'retail' ? 'Retail' : 'Wholesale'} Catalog
         </h3>
         <span className="text-sm font-medium text-muted-foreground">Total: <strong className="text-primary-dark">{products.length}</strong></span>
       </div>

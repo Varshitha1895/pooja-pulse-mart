@@ -2,7 +2,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Loader2, UploadCloud, CheckCircle2, AlertCircle } from "lucide-react";
 
-export function AddProduct() {
+export function AddProduct({ catalogType }: { catalogType: 'retail' | 'wholesale' }) {
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -51,6 +51,7 @@ export function AddProduct() {
             price: parseFloat(price),
             unit: unit,
             image_url: publicUrl,
+            catalog: catalogType,
           }
         ]);
 
@@ -78,8 +79,8 @@ export function AddProduct() {
   return (
     <div className="max-w-2xl bg-white p-6 md:p-8 rounded-xl shadow-sm border border-secondary/50">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-primary-dark">Add New Product</h2>
-        <p className="text-muted-foreground mt-1">Upload a new product to your store catalog.</p>
+        <h2 className="text-2xl font-bold text-primary-dark">Add {catalogType === 'retail' ? 'Retail' : 'Wholesale'} Product</h2>
+        <p className="text-muted-foreground mt-1">Upload a new product to your {catalogType} store catalog.</p>
       </div>
 
       {error && (

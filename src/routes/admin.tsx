@@ -156,7 +156,7 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"orders" | "add-product" | "manage-products">("orders");
+  const [activeTab, setActiveTab] = useState<"orders" | "retail-manage" | "retail-add" | "wholesale-manage" | "wholesale-add">("orders");
 
   const fetchOrders = async () => {
     setIsLoading(true);
@@ -265,28 +265,50 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
             <p className="text-muted-foreground mt-1">Manage your store orders and catalog</p>
           </div>
           
-          <div className="flex bg-secondary/30 p-1 rounded-lg border border-secondary/50 overflow-x-auto">
-            <button
-              onClick={() => setActiveTab("orders")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "orders" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              <ListOrdered className="w-4 h-4" />
-              Orders
-            </button>
-            <button
-              onClick={() => setActiveTab("add-product")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "add-product" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              <PlusCircle className="w-4 h-4" />
-              Add Product
-            </button>
-            <button
-              onClick={() => setActiveTab("manage-products")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "manage-products" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              <Grid className="w-4 h-4" />
-              Manage Catalog
-            </button>
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex bg-secondary/30 p-1 rounded-lg border border-secondary/50 shrink-0">
+              <button
+                onClick={() => setActiveTab("orders")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "orders" ? "bg-white text-primary-dark shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                <ListOrdered className="w-4 h-4" />
+                Orders
+              </button>
+            </div>
+
+            <div className="flex bg-blue-50/50 p-1 rounded-lg border border-blue-100 shrink-0">
+              <button
+                onClick={() => setActiveTab("retail-manage")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "retail-manage" ? "bg-white text-blue-800 shadow-sm" : "text-blue-600/70 hover:text-blue-700"}`}
+              >
+                <Grid className="w-4 h-4" />
+                Retail Catalog
+              </button>
+              <button
+                onClick={() => setActiveTab("retail-add")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "retail-add" ? "bg-white text-blue-800 shadow-sm" : "text-blue-600/70 hover:text-blue-700"}`}
+              >
+                <PlusCircle className="w-4 h-4" />
+                Add Retail
+              </button>
+            </div>
+
+            <div className="flex bg-purple-50/50 p-1 rounded-lg border border-purple-100 shrink-0">
+              <button
+                onClick={() => setActiveTab("wholesale-manage")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "wholesale-manage" ? "bg-white text-purple-800 shadow-sm" : "text-purple-600/70 hover:text-purple-700"}`}
+              >
+                <Grid className="w-4 h-4" />
+                Wholesale Catalog
+              </button>
+              <button
+                onClick={() => setActiveTab("wholesale-add")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition whitespace-nowrap ${activeTab === "wholesale-add" ? "bg-white text-purple-800 shadow-sm" : "text-purple-600/70 hover:text-purple-700"}`}
+              >
+                <PlusCircle className="w-4 h-4" />
+                Add Wholesale
+              </button>
+            </div>
           </div>
         </div>
 
@@ -410,13 +432,19 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
             </table>
           </div>
         </div>
-        ) : activeTab === "add-product" ? (
+        ) : activeTab === "retail-add" ? (
           <div className="flex justify-center">
-            <AddProduct />
+            <AddProduct catalogType="retail" />
           </div>
-        ) : (
-          <ManageProducts />
-        )}
+        ) : activeTab === "retail-manage" ? (
+          <ManageProducts catalogType="retail" />
+        ) : activeTab === "wholesale-add" ? (
+          <div className="flex justify-center">
+            <AddProduct catalogType="wholesale" />
+          </div>
+        ) : activeTab === "wholesale-manage" ? (
+          <ManageProducts catalogType="wholesale" />
+        ) : null}
       </main>
     </div>
   );
