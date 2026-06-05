@@ -1,7 +1,5 @@
 import { createFileRoute, Link, useParams, useSearch } from "@tanstack/react-router";
-import { retailProducts } from "@/lib/retail-products";
-import { wholesaleProducts } from "@/lib/wholesale-products";
-const products = [...retailProducts, ...wholesaleProducts];
+
 import { useCart } from "@/lib/cart";
 import { useWholesaleCart } from "@/lib/wholesale-cart";
 import { ShoppingBag, Package, Star, MessageCircle, ChevronRight, Check } from "lucide-react";
@@ -21,36 +19,44 @@ function ProductDetails() {
   const search: any = useSearch({ strict: false });
   const isWholesale = search.type === 'wholesale';
   
-  const [product, setProduct] = useState<Product | undefined>(products.find((p) => p.id === productId));
-  const [loading, setLoading] = useState(!product);
+  const [product, setProduct] = useState<Product | undefined>(undefined);
+  const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   
   const retailCart = useCart();
   const wholesaleCart = useWholesaleCart();
   const [added, setAdded] = useState<'retail' | 'wholesale' | null>(null);
 
   useEffect(() => {
-    const localProduct = products.find((p) => p.id === productId);
-    if (localProduct) {
-      setProduct(localProduct);
-      setLoading(false);
-      return;
-    }
-
     setLoading(true);
-    const fetchProduct = async () => {
+    const fetchAll = async () => {
       try {
-        const { data, error } = await supabase.from('products').select('*').eq('id', productId).single();
+        const { data, error } = await supabase.from('products').select('*');
         if (data && !error) {
-          setProduct({
-            id: data.id,
-            name: data.name,
-            category: data.category,
-            price: Number(data.price),
-            image: data.image_url,
-            catalog: isWholesale ? 'wholesale' : 'retail',
-            unit: data.unit || '1 pack',
-            description: data.description
+          const formattedProducts: Product[] = data.map(p => {
+            const rawCat = p.category || '';
+            const isW = rawCat.toLowerCase().startsWith('[wholesale]');
+            const isR = rawCat.toLowerCase().startsWith('[retail]');
+            const parsedCatalog = (isW ? 'wholesale' : isR ? 'retail' : 'retail') as 'retail' | 'wholesale' | 'both';
+            const cleanCategory = rawCat.replace(/\[.*?\]\s*/, '');
+            
+            return {
+              id: p.id,
+              name: p.name,
+              category: cleanCategory,
+              price: Number(p.price),
+              image: p.image_url,
+              catalog: parsedCatalog,
+              unit: p.unit || '1 pack',
+              description: p.description
+            };
           });
+          
+          const filtered = formattedProducts.filter(p => isWholesale ? p.catalog === 'wholesale' : p.catalog === 'retail');
+          setCatalogProducts(filtered);
+          
+          const found = formattedProducts.find(p => p.id === productId);
+          setProduct(found);
         } else {
           setProduct(undefined);
         }
@@ -61,7 +67,7 @@ function ProductDetails() {
         setLoading(false);
       }
     };
-    fetchProduct();
+    fetchAll();
   }, [productId, isWholesale]);
 
   if (loading) {
@@ -95,9 +101,7 @@ function ProductDetails() {
     }, 2000);
   };
 
-  const catalogProducts = isWholesale 
-    ? products.filter(p => p.catalog === 'wholesale' || p.catalog === 'both')
-    : products.filter(p => p.catalog === 'retail' || p.catalog === 'both');
+
 
   const relatedProducts = catalogProducts
     .filter((p) => p.category === product.category && p.id !== product.id)

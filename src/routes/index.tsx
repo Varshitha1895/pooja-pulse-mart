@@ -4,7 +4,6 @@ import { ArrowRight, Truck, ShieldCheck, Zap, ChevronRight, Package } from "luci
 import hero from "@/assets/hero-pooja.jpg";
 import muralBgRealistic from "@/assets/rama-sita-realistic.png";
 import { DivinePetals } from "@/components/site/DivinePetals";
-import { retailProducts as staticProducts } from "@/lib/retail-products";
 import { supabase } from "@/lib/supabase";
 import type { Product } from "@/lib/types";
 import { useEffect, useState } from "react";
@@ -27,7 +26,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const scroller = useRef<HTMLDivElement>(null);
-  const [featured, setFeatured] = useState<Product[]>(staticProducts.slice(0, 8));
+  const [featured, setFeatured] = useState<Product[]>([]);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -41,16 +40,24 @@ function Home() {
         if (error) throw error;
         
         if (data && data.length > 0) {
-          const formattedProducts: Product[] = data.map(p => ({
-            id: p.id,
-            name: p.name,
-            category: p.category,
-            price: Number(p.price),
-            image: p.image_url,
-            catalog: p.catalog || 'retail',
-            description: p.description || '',
-            unit: p.unit || '1 pack'
-          })).filter(p => p.catalog === 'retail' || p.catalog === 'both');
+          const formattedProducts: Product[] = data.map(p => {
+            const rawCat = p.category || '';
+            const isWholesale = rawCat.toLowerCase().startsWith('[wholesale]');
+            const isRetail = rawCat.toLowerCase().startsWith('[retail]');
+            const parsedCatalog = (isWholesale ? 'wholesale' : isRetail ? 'retail' : 'retail') as 'retail' | 'wholesale' | 'both';
+            const cleanCategory = rawCat.replace(/\[.*?\]\s*/, '');
+
+            return {
+              id: p.id,
+              name: p.name,
+              category: cleanCategory,
+              price: Number(p.price),
+              image: p.image_url,
+              catalog: parsedCatalog,
+              description: p.description || '',
+              unit: p.unit || '1 pack'
+            };
+          }).filter(p => p.catalog === 'retail' || p.catalog === 'both');
           
           if (formattedProducts.length > 0) {
             setFeatured(formattedProducts.slice(0, 8));

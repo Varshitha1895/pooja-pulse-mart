@@ -25,16 +25,24 @@ export function ManageProducts({ catalogType }: { catalogType: 'retail' | 'whole
       if (error) throw error;
       
       const formattedProducts: Product[] = (data || [])
-        .filter(p => p.catalog === catalogType)
-        .map(p => ({
-          id: p.id,
-          name: p.name,
-          category: p.category,
-          price: Number(p.price),
-          image: p.image_url,
-          catalog: p.catalog || 'retail',
-          unit: p.unit || ''
-        }));
+        .map(p => {
+          const rawCat = p.category || '';
+          const isWholesale = rawCat.toLowerCase().startsWith('[wholesale]');
+          const isRetail = rawCat.toLowerCase().startsWith('[retail]');
+          const parsedCatalog = (isWholesale ? 'wholesale' : isRetail ? 'retail' : 'retail') as 'retail' | 'wholesale' | 'both';
+          const cleanCategory = rawCat.replace(/\[.*?\]\s*/, '');
+          
+          return {
+            id: p.id,
+            name: p.name,
+            category: cleanCategory,
+            price: Number(p.price),
+            image: p.image_url,
+            catalog: parsedCatalog,
+            unit: p.unit || ''
+          };
+        })
+        .filter(p => p.catalog === catalogType);
       
       setProducts(formattedProducts);
     } catch (err) {
@@ -90,7 +98,7 @@ export function ManageProducts({ catalogType }: { catalogType: 'retail' | 'whole
         .from('products')
         .update({
           name: editForm.name,
-          category: editForm.category,
+          category: `[${catalogType}] ${editForm.category}`,
           price: editForm.price,
           unit: editForm.unit,
         })

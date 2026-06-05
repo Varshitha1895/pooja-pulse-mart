@@ -17,32 +17,11 @@ import {
   Camera
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { supabase } from "@/lib/supabase";
-import { retailProducts as products } from "@/lib/retail-products";
-
 export const Route = createFileRoute("/profile")({
   component: Profile,
 });
+import { supabase } from "@/lib/supabase";
 
-// Restore dummy orders for "My Orders" tab
-const dummyOrders = [
-  {
-    id: "ORD-101",
-    status: "delivered",
-    date: "12th May 2026, 12:47 pm",
-    price: 113,
-    items: [products[0], products[1]], 
-    rateable: true,
-  },
-  {
-    id: "ORD-102",
-    status: "cancelled",
-    date: "12th May 2026, 12:41 pm",
-    price: 231,
-    items: [products[2]],
-    rateable: false,
-  }
-];
 
 type Address = {
   id: string;

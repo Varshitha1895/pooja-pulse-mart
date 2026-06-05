@@ -1,3 +1,4 @@
+import type { Product } from "@/lib/types";
 import { useCart } from "@/lib/cart";
 import { Plus } from "lucide-react";
 import { Link } from "@tanstack/react-router";

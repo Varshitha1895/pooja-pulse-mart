@@ -35,15 +35,23 @@ function Retail() {
           
         if (error) throw error;
         
-        const formattedProducts: Product[] = (data || []).map(p => ({
-          id: p.id,
-          name: p.name,
-          category: p.category,
-          price: Number(p.price),
-          image: p.image_url,
-          catalog: 'retail',
-          unit: p.unit || '1 pack'
-        }));
+        const formattedProducts: Product[] = (data || []).map(p => {
+          const rawCat = p.category || '';
+          const isWholesale = rawCat.toLowerCase().startsWith('[wholesale]');
+          const isRetail = rawCat.toLowerCase().startsWith('[retail]');
+          const parsedCatalog = (isWholesale ? 'wholesale' : isRetail ? 'retail' : 'retail') as 'retail' | 'wholesale' | 'both';
+          const cleanCategory = rawCat.replace(/\[.*?\]\s*/, '');
+          
+          return {
+            id: p.id,
+            name: p.name,
+            category: cleanCategory,
+            price: Number(p.price),
+            image: p.image_url,
+            catalog: parsedCatalog,
+            unit: p.unit || '1 pack'
+          };
+        }).filter(p => p.catalog === 'retail' || p.catalog === 'both');
         
         setProducts(formattedProducts);
       } catch (err) {

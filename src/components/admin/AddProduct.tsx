@@ -46,12 +46,11 @@ export function AddProduct({ catalogType }: { catalogType: 'retail' | 'wholesale
         .from('products')
         .insert([
           {
-            category,
+            category: `[${catalogType}] ${category}`,
             name,
             price: parseFloat(price),
             unit: unit,
             image_url: publicUrl,
-            catalog: catalogType,
           }
         ]);
 
