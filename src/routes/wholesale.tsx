@@ -121,7 +121,7 @@ function Wholesale() {
               key={p.id}
               className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-warm transition flex flex-col group"
             >
-              <div className="aspect-[4/3] bg-gradient-warm overflow-hidden relative">
+              <div className="aspect-[4/5] bg-gradient-warm overflow-hidden relative">
                 <img
                   src={p.image}
                   alt={p.name}
