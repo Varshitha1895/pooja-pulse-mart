@@ -3,8 +3,6 @@ import { supabase } from "@/lib/supabase";
 import { Loader2, UploadCloud, CheckCircle2, AlertCircle } from "lucide-react";
 
 export function AddProduct() {
-  const [catalog, setCatalog] = useState("retail");
-  const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -19,8 +17,8 @@ export function AddProduct() {
     setError("");
     setSuccess(false);
 
-    if (!category || !name || (catalog === 'retail' && !price) || !unit || !file) {
-      setError("Please fill all required fields and select an image.");
+    if (!category || !name || !price || !unit || !file) {
+      setError("Please fill all fields and select an image.");
       return;
     }
 
@@ -48,11 +46,9 @@ export function AddProduct() {
         .from('products')
         .insert([
           {
-            catalog,
-            description: description || null,
             category,
             name,
-            price: catalog === 'wholesale' ? 0 : parseFloat(price),
+            price: parseFloat(price),
             unit: unit,
             image_url: publicUrl,
           }
@@ -62,8 +58,6 @@ export function AddProduct() {
 
       // Success
       setSuccess(true);
-      setCatalog("retail");
-      setDescription("");
       setCategory("");
       setName("");
       setPrice("");
@@ -104,19 +98,6 @@ export function AddProduct() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Catalog Type</label>
-          <select
-            value={catalog}
-            onChange={(e) => setCatalog(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-          >
-            <option value="retail">Retail (Regular Customers)</option>
-            <option value="wholesale">Wholesale (Bulk/Temples)</option>
-            <option value="both">Both</option>
-          </select>
-        </div>
-
-        <div>
           <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Category</label>
           <input
             type="text"
@@ -141,31 +122,18 @@ export function AddProduct() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Description (Optional)</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition resize-none"
-            placeholder="Detailed description of the product"
-            rows={3}
+          <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Price (₹)</label>
+          <input
+            type="number"
+            required
+            min="0"
+            step="0.01"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+            placeholder="e.g. 150"
           />
         </div>
-
-        {catalog !== 'wholesale' && (
-          <div>
-            <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Price (₹)</label>
-            <input
-              type="number"
-              required={catalog === 'retail'}
-              min="0"
-              step="0.01"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-              placeholder="e.g. 150"
-            />
-          </div>
-        )}
 
         <div>
           <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Unit / Weight</label>

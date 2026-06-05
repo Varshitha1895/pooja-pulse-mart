@@ -1,10 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { Package, Loader2 } from "lucide-react";
+import { wholesaleProducts as products } from "@/lib/wholesale-products";
+import { Package } from "lucide-react";
 import { useWholesaleCart } from "@/lib/wholesale-cart";
 import shivaImg from "@/assets/gods/shiva.png";
-import { supabase } from "@/lib/supabase";
-import type { Product } from "@/lib/types";
 
 export const Route = createFileRoute("/wholesale")({
   head: () => ({
@@ -19,44 +17,11 @@ export const Route = createFileRoute("/wholesale")({
   component: Wholesale,
 });
 
+const wa = (name: string) =>
+  `https://wa.me/919999999999?text=${encodeURIComponent(`Hi, I'd like a bulk quote for: ${name}`)}`;
+
 function Wholesale() {
   const { count } = useWholesaleCart();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: true });
-          
-        if (error) throw error;
-        
-        const formattedProducts: Product[] = (data || [])
-          .map(p => ({
-            id: p.id,
-            name: p.name,
-            category: p.category,
-            price: Number(p.price),
-            image: p.image_url,
-            catalog: p.catalog || 'retail',
-            description: p.description || '',
-            unit: p.unit || ''
-          }))
-          .filter(p => p.catalog === 'wholesale' || p.catalog === 'both');
-        
-        setProducts(formattedProducts);
-      } catch (err) {
-        console.error("Error fetching wholesale products:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    
-    fetchProducts();
-  }, []);
 
   return (
     <div className="mx-auto max-w-7xl px-4 md:px-8 py-12">
@@ -97,51 +62,33 @@ function Wholesale() {
         <h2 className="text-display text-2xl font-semibold">Catalog</h2>
       </div>
 
-      {isLoading ? (
-        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-          <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
-          <p className="text-lg font-medium">Loading catalog...</p>
-        </div>
-      ) : products.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground bg-white/30 backdrop-blur-sm rounded-xl border border-white/40">
-          No wholesale products found at the moment.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-          {products.map((p) => (
-            <div
-              key={p.id}
-              className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-warm transition flex flex-col group"
-            >
-              <div className="aspect-[4/3] bg-gradient-warm overflow-hidden relative">
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-5 flex-1 flex flex-col justify-end">
-                <div className="mb-3">
-                  <h3 className="font-semibold text-lg text-foreground">{p.name}</h3>
-                  <div className="text-sm text-muted-foreground mt-1 flex justify-between">
-                    <span>{p.category}</span>
-                    {p.unit && <span className="font-medium">{p.unit}</span>}
-                  </div>
-                </div>
-                <Link
-                  to={`/product/$productId`}
-                  params={{ productId: p.id }}
-                  search={{ type: 'wholesale' }}
-                  className="mt-2 inline-flex items-center justify-center w-full bg-secondary text-foreground font-semibold py-2.5 rounded-md hover:bg-secondary/80 transition"
-                >
-                  View Details
-                </Link>
-              </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+        {products.map((p) => (
+          <div
+            key={p.id}
+            className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-warm transition flex flex-col group"
+          >
+            <div className="aspect-[4/3] bg-gradient-warm overflow-hidden relative">
+              <img
+                src={p.image}
+                alt={p.name}
+                loading="lazy"
+                className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+              />
             </div>
-          ))}
-        </div>
-      )}
+            <div className="p-5 flex-1 flex flex-col justify-end">
+              <Link
+                to={`/product/$productId`}
+                params={{ productId: p.id }}
+                search={{ type: 'wholesale' }}
+                className="mt-4 inline-flex items-center justify-center w-full bg-secondary text-foreground font-semibold py-2.5 rounded-md hover:bg-secondary/80 transition"
+              >
+                View More
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {count > 0 && (
         <Link
