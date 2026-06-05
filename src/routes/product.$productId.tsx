@@ -266,7 +266,31 @@ function ProductDetails() {
           <h2 className="text-xl font-bold mb-6">Similar Products</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {relatedProducts.map((p) => (
-              <ProductCard key={p.id} product={p} isWholesale={isWholesale} />
+              isWholesale ? (
+                <div
+                  key={p.id}
+                  className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-warm transition flex flex-col group"
+                >
+                  <div className="aspect-[4/3] bg-gradient-warm overflow-hidden relative">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col justify-end">
+                    <a
+                      href={`/product/${p.id}?type=wholesale`}
+                      className="mt-2 inline-flex items-center justify-center w-full bg-secondary text-foreground text-sm font-semibold py-2 rounded-md hover:bg-secondary/80 transition"
+                    >
+                      View Details
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <ProductCard key={p.id} product={p} isWholesale={false} />
+              )
             ))}
           </div>
         </div>
