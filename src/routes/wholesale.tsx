@@ -115,13 +115,13 @@ function Wholesale() {
           No wholesale products found
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {products.map((p) => (
             <div
               key={p.id}
               className="rounded-xl border border-white/40 bg-white/50 backdrop-blur-md overflow-hidden hover:shadow-warm transition flex flex-col group"
             >
-              <div className="aspect-[4/5] bg-gradient-warm overflow-hidden relative">
+              <div className="aspect-square bg-gradient-warm overflow-hidden relative">
                 <img
                   src={p.image}
                   alt={p.name}
