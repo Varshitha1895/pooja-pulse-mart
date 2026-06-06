@@ -34,6 +34,7 @@ function Home() {
         const { data, error } = await supabase
           .from('products')
           .select('*')
+          .not('category', 'ilike', '[wholesale]%')
           .order('created_at', { ascending: false })
           .limit(8);
           
