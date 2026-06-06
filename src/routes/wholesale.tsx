@@ -115,7 +115,7 @@ function Wholesale() {
           No wholesale products found
         </div>
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
           {products.map((p) => (
             <div
               key={p.id}
