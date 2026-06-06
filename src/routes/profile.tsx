@@ -197,13 +197,18 @@ function Profile() {
               </button>
 
               <a 
-                href="https://wa.me/919999999999?text=Hi%20Pooja%20Pulse%20Mart,%20I%20need%20help%20with%20my%20account" 
+                href="https://wa.me/919032597329?text=Hi%20Divine%20Hub%20Support" 
                 target="_blank" 
                 rel="noreferrer"
-                className="flex items-center gap-4 px-5 py-3 hover:bg-secondary/50 transition border-l-4 border-transparent text-left"
+                className={`flex items-center gap-4 px-6 py-4 cursor-pointer hover:bg-muted/50 transition-colors ${
+                  activeTab === 'support' ? 'bg-muted/50 border-l-4 border-primary' : 'border-l-4 border-transparent'
+                }`}
+                onClick={() => setActiveTab('support')}
               >
-                <Headphones className="h-5 w-5 text-[#25D366]" />
-                <span className="text-sm font-medium text-muted-foreground">Customer Support</span>
+                <Headphones className={`h-5 w-5 ${activeTab === 'support' ? 'text-primary' : 'text-green-500'}`} />
+                <span className={`text-sm font-medium ${activeTab === 'support' ? 'text-foreground font-bold' : 'text-muted-foreground'}`}>
+                  Customer Support
+                </span>
               </a>
             </nav>
 

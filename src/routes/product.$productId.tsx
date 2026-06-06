@@ -225,7 +225,7 @@ function ProductDetails() {
                   )}
                 </button>
                 <p className="text-center text-xs text-muted-foreground mt-3">
-                  Or order directly via <a href={`https://wa.me/919999999999?text=${encodeURIComponent(`Hi, I'd like a bulk quote for: ${product.name}`)}`} className="text-[#25D366] font-bold hover:underline" target="_blank" rel="noreferrer">WhatsApp</a>
+                  Or order directly via <a href={`https://wa.me/919032597329?text=${encodeURIComponent(`Hi, I'd like a bulk quote for: ${product.name}`)}`} className="text-[#25D366] font-bold hover:underline" target="_blank" rel="noreferrer">WhatsApp</a>
                 </p>
               </div>
             )}

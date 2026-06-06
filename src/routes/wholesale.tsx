@@ -20,7 +20,7 @@ export const Route = createFileRoute("/wholesale")({
 });
 
 const wa = (name: string) =>
-  `https://wa.me/919999999999?text=${encodeURIComponent(`Hi, I'd like a bulk quote for: ${name}`)}`;
+  `https://wa.me/919032597329?text=${encodeURIComponent(`Hi, I'd like a bulk quote for: ${name}`)}`;
 
 function Wholesale() {
   const { count } = useWholesaleCart();
