@@ -236,6 +236,7 @@ function Home() {
           <div
             ref={scroller}
             className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-hide pb-10 -mx-4 px-4 md:px-12 snap-x"
+            style={{ overflowAnchor: 'none' }}
           >
             {featured.map((p) => (
               <Link
