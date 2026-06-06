@@ -72,6 +72,13 @@ function Home() {
     fetchProducts();
   }, []);
 
+  // Force scroll to start when products load to prevent any browser snap/anchor glitches
+  useEffect(() => {
+    if (featured.length > 0 && scroller.current) {
+      scroller.current.scrollTo({ left: 0, behavior: 'instant' as any });
+    }
+  }, [featured]);
+
   return (
     <>
       {/* HERO */}
