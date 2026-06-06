@@ -92,26 +92,26 @@ function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/70" />
         
-        <div className="relative z-10 text-center px-4 max-w-4xl">
+        <div className="relative z-10 text-center px-4 max-w-5xl">
           <div className="relative mt-6 inline-block">
 
-            <h1 className="text-display text-5xl md:text-7xl font-semibold text-cream leading-tight">
+            <h1 className="text-display text-5xl md:text-7xl lg:text-8xl font-semibold text-cream leading-tight">
               Experience <em className="text-accent not-italic">Divine Hub</em> in Every Ritual
             </h1>
           </div>
-          <p className="mt-5 text-lg text-cream/85 max-w-2xl mx-auto">
+          <p className="mt-6 text-xl md:text-2xl text-cream/90 max-w-3xl mx-auto">
             Curated premium essentials for your daily spiritual practice.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center">
             <Link
               to="/retail"
-              className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-md bg-gradient-gold text-primary-foreground font-semibold tracking-wide shadow-warm hover:shadow-glow transition"
+              className="group inline-flex items-center justify-center gap-3 px-10 py-5 text-lg rounded-lg bg-gradient-gold text-primary-foreground font-semibold tracking-wide shadow-warm hover:shadow-glow transition"
             >
-              EXPLORE RETAIL <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition" />
+              EXPLORE RETAIL <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition" />
             </Link>
             <Link
               to="/wholesale"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-md border-2 border-cream/80 text-cream font-semibold tracking-wide hover:bg-cream hover:text-foreground transition"
+              className="inline-flex items-center justify-center gap-3 px-10 py-5 text-lg rounded-lg border-2 border-cream/80 text-cream font-semibold tracking-wide hover:bg-cream hover:text-foreground transition"
             >
               BULK ORDERS
             </Link>
