@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { supabase } from "./supabase";
 
 interface User {
   name: string;
@@ -35,6 +36,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     return null;
   });
+
+  // Background Sync: Recover stranded local reviews and push them to Supabase
+  useEffect(() => {
+    const syncStrandedReviews = async () => {
+      try {
+        const localReviews = JSON.parse(localStorage.getItem('dp_reviews') || '[]');
+        if (localReviews.length === 0) return;
+        
+        let updated = false;
+        for (const review of localReviews) {
+          if (review.synced) continue;
+          
+          const { data: order } = await supabase.from('orders').select('delivery_instructions').eq('id', review.orderId).single();
+          if (order) {
+            const currentInst = order.delivery_instructions || '';
+            if (!currentInst.includes('||REVIEW||')) {
+              const newInst = currentInst + (currentInst ? " " : "") + `||REVIEW||${review.rating}||${review.feedback}`;
+              await supabase.from('orders').update({ delivery_instructions: newInst }).eq('id', review.orderId);
+            }
+          }
+          review.synced = true;
+          updated = true;
+        }
+        
+        if (updated) {
+          localStorage.setItem('dp_reviews', JSON.stringify(localReviews));
+        }
+      } catch (err) {
+        console.error("Failed to sync stranded reviews:", err);
+      }
+    };
+    
+    // Give the app a few seconds to load before running background sync
+    const timer = setTimeout(syncStrandedReviews, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const login = (name: string, phone: string) => {
     const newUser = { name, phone };
