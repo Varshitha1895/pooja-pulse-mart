@@ -27,6 +27,11 @@ function Checkout() {
   const [name, setName] = useState(user?.name || "");
   const [phone, setPhone] = useState(user?.phone || "");
   const [address, setAddress] = useState(user?.address || "");
+  const [locationArea, setLocationArea] = useState(user?.locationArea || "");
+  const [houseNo, setHouseNo] = useState(user?.houseNo || "");
+  const [city, setCity] = useState(user?.city || "");
+  const [state, setState] = useState(user?.state || "");
+  const [pincode, setPincode] = useState(user?.pincode || "");
   const [instructions, setInstructions] = useState("");
   const [gpsLink, setGpsLink] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("COD");
@@ -140,7 +145,7 @@ function Checkout() {
                 razorpay_order_id: response.razorpay_order_id
               }).eq("id", orderId);
               
-              updateUser({ name, phone, address });
+              updateUser({ name, phone, address, locationArea, houseNo, city, state, pincode });
               clear();
               setIsSuccess(true);
             } else {
@@ -195,10 +200,12 @@ function Checkout() {
     setIsSubmitting(true);
 
     try {
+      const fullAddress = [houseNo, address, locationArea, city, state, pincode].filter(Boolean).join(", ");
+
       const orderData = {
         customer_name: name,
         phone,
-        address,
+        address: fullAddress,
         delivery_instructions: [instructions, gpsLink ? `GPS: ${gpsLink}` : null].filter(Boolean).join("\n\n"),
         total_amount: total,
         payment_method: paymentMethod === "COD" ? "COD" : "Razorpay",
@@ -221,7 +228,7 @@ function Checkout() {
       if (paymentMethod === "ONLINE") {
         await handleOnlinePayment(orderId);
       } else {
-        updateUser({ name, phone, address });
+        updateUser({ name, phone, address, locationArea, houseNo, city, state, pincode });
         clear();
         setIsSuccess(true);
         setIsSubmitting(false);
@@ -268,16 +275,71 @@ function Checkout() {
                     placeholder="10-digit mobile number"
                   />
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Location / Area *</label>
+                    <input
+                      type="text"
+                      required
+                      value={locationArea}
+                      onChange={(e) => setLocationArea(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                      placeholder="E.g. Andheri West"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5 text-muted-foreground">House / Flat No. (Optional)</label>
+                    <input
+                      type="text"
+                      value={houseNo}
+                      onChange={(e) => setHouseNo(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                      placeholder="E.g. Flat 402"
+                    />
+                  </div>
+                </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Detailed Delivery Address *</label>
+                  <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Complete Address *</label>
                   <textarea
                     required
-                    rows={3}
+                    rows={2}
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition resize-none"
-                    placeholder="House/Flat No., Building Name, Street, Area, City, Pincode"
+                    placeholder="Building Name, Street Name, Landmark"
                   />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5 text-muted-foreground">City *</label>
+                    <input
+                      type="text"
+                      required
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5 text-muted-foreground">State *</label>
+                    <input
+                      type="text"
+                      required
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Pincode *</label>
+                    <input
+                      type="text"
+                      required
+                      value={pincode}
+                      onChange={(e) => setPincode(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-md border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                    />
+                  </div>
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-1.5">

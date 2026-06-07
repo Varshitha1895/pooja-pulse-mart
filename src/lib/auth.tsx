@@ -5,6 +5,11 @@ interface User {
   phone: string;
   avatar_url?: string;
   address?: string;
+  locationArea?: string;
+  houseNo?: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
 }
 
 interface AuthContextType {
