@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Package } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 type Msg = { from: "bot" | "user"; text: string };
 
@@ -38,6 +39,15 @@ export function ChatWidget() {
       >
         {open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
       </button>
+
+      {/* Floating Track Order Button */}
+      <Link
+        to="/profile"
+        className={`fixed right-5 z-40 flex items-center gap-2 px-5 py-3 rounded-full bg-background text-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-border hover:scale-105 transition-all duration-300 font-semibold text-sm ${open ? 'bottom-[400px] opacity-0 pointer-events-none' : 'bottom-24 opacity-100'}`}
+      >
+        <Package className="w-4 h-4 text-primary" />
+        Track Order
+      </Link>
 
       {open && (
         <div className="fixed bottom-24 right-5 z-50 w-[340px] max-w-[calc(100vw-2.5rem)] rounded-xl border border-border bg-card shadow-warm overflow-hidden flex flex-col">
