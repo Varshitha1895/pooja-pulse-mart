@@ -382,6 +382,14 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
                             {renderInstructions(order.delivery_instructions)}
                           </div>
                         )}
+                        {order.rating && (
+                          <div className="mt-2 bg-green-50 text-green-800 p-2.5 rounded-md border border-green-200 text-sm">
+                            <strong className="block mb-1 text-green-900 flex items-center gap-1">
+                              Customer Feedback <span className="text-yellow-500 text-base ml-1">{'★'.repeat(order.rating)}{'☆'.repeat(5 - order.rating)}</span>
+                            </strong>
+                            {order.feedback && <span className="italic text-green-900/80">"{order.feedback}"</span>}
+                          </div>
+                        )}
                       </td>
                       <td className="px-6 py-4 align-top">
                         <div className="space-y-1.5">
