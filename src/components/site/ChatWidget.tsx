@@ -42,7 +42,7 @@ export function ChatWidget() {
 
       {/* Floating Track Order Button */}
       <Link
-        to="/profile"
+        to="/profile?tab=orders"
         className={`fixed right-5 z-40 flex items-center gap-2 px-5 py-3 rounded-full bg-background text-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-border hover:scale-105 transition-all duration-300 font-semibold text-sm ${open ? 'bottom-[400px] opacity-0 pointer-events-none' : 'bottom-24 opacity-100'}`}
       >
         <Package className="w-4 h-4 text-primary" />

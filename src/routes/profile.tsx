@@ -224,7 +224,9 @@ function Profile() {
     }
   };
 
-  const [activeTab, setActiveTab] = useState<'delivery' | 'orders'>('delivery');
+  const searchParams = new URLSearchParams(window.location.search);
+  const defaultTab = searchParams.get('tab') === 'orders' ? 'orders' : 'delivery';
+  const [activeTab, setActiveTab] = useState<'delivery' | 'orders'>(defaultTab);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isAddingNew, setIsAddingNew] = useState(true); // Default to adding if none exist
   const [orders, setOrders] = useState<any[]>([]);
