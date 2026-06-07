@@ -350,7 +350,15 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
                     </td>
                   </tr>
                 ) : (
-                  orders.map((order) => (
+                  orders.map((order) => {
+                    // Try to fetch rating from order directly (if Supabase supports it later) 
+                    // or from our local demo storage
+                    const localReviews = JSON.parse(localStorage.getItem('dp_reviews') || '[]');
+                    const matchingReview = localReviews.find((r: any) => r.orderId === order.id);
+                    const finalRating = order.rating || matchingReview?.rating;
+                    const finalFeedback = order.feedback || matchingReview?.feedback;
+
+                    return (
                     <tr key={order.id} className="hover:bg-secondary/10 transition group">
                       <td className="px-6 py-4 align-top">
                         <span className="text-xs font-mono bg-secondary/50 px-2 py-1 rounded text-primary-dark">
@@ -382,12 +390,12 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
                             {renderInstructions(order.delivery_instructions)}
                           </div>
                         )}
-                        {order.rating && (
+                        {finalRating && (
                           <div className="mt-2 bg-green-50 text-green-800 p-2.5 rounded-md border border-green-200 text-sm">
                             <strong className="block mb-1 text-green-900 flex items-center gap-1">
-                              Customer Feedback <span className="text-yellow-500 text-base ml-1">{'★'.repeat(order.rating)}{'☆'.repeat(5 - order.rating)}</span>
+                              Customer Feedback <span className="text-yellow-500 text-base ml-1">{'★'.repeat(finalRating)}{'☆'.repeat(5 - finalRating)}</span>
                             </strong>
-                            {order.feedback && <span className="italic text-green-900/80">"{order.feedback}"</span>}
+                            {finalFeedback && <span className="italic text-green-900/80">"{finalFeedback}"</span>}
                           </div>
                         )}
                       </td>
@@ -434,7 +442,7 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
                         )}
                       </td>
                     </tr>
-                  ))
+                  )})
                 )}
               </tbody>
             </table>

@@ -66,13 +66,24 @@ function OrderTracker({ order }: { order: any }) {
     try {
       // Attempt to save to Supabase. If columns don't exist, this will fail gracefully.
       await supabase.from("orders").update({ rating, feedback }).eq("id", order.id);
-      setIsSubmitted(true);
     } catch (error) {
       console.error(error);
-      setIsSubmitted(true); // Mock success for the UI preview
-    } finally {
-      setIsSubmitting(false);
     }
+
+    // Save to localStorage for demo purposes since Supabase columns might be missing
+    const localReviews = JSON.parse(localStorage.getItem('dp_reviews') || '[]');
+    // Remove if already exists to avoid duplicates
+    const filtered = localReviews.filter((r: any) => r.orderId !== order.id);
+    filtered.push({ 
+      orderId: order.id, 
+      customer_name: order.customer_name || "Guest", 
+      rating, 
+      feedback, 
+      created_at: new Date().toISOString() 
+    });
+    localStorage.setItem('dp_reviews', JSON.stringify(filtered));
+
+    setIsSubmitted(true);
   };
 
   return (

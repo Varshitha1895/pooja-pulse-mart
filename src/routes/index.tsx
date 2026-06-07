@@ -71,6 +71,7 @@ function Home() {
     }
     
     async function fetchReviews() {
+      let dbReviews: any[] = [];
       try {
         const { data, error } = await supabase
           .from('orders')
@@ -80,10 +81,17 @@ function Home() {
           .limit(6);
           
         if (!error && data) {
-          // Filter out empty feedbacks just to keep the section looking good
-          setReviews(data.filter(r => r.feedback && r.feedback.trim() !== ""));
+          dbReviews = data;
         }
       } catch (err) {}
+      
+      // Load local demo reviews
+      const localReviews = JSON.parse(localStorage.getItem('dp_reviews') || '[]');
+      
+      const allReviews = [...localReviews, ...dbReviews]
+        .filter(r => r.feedback && r.feedback.trim() !== "");
+        
+      setReviews(allReviews.slice(0, 6));
     }
 
     fetchProducts();
