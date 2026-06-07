@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useCart } from "@/lib/cart";
 import { supabase } from "@/lib/supabase";
 import { CreditCard, Truck, CheckCircle2, ShoppingBag, Loader2, MapPin } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/checkout")({
   component: Checkout,
@@ -21,10 +22,11 @@ const loadRazorpayScript = () => {
 function Checkout() {
   const { items, total, clear } = useCart();
   const navigate = useNavigate();
+  const { user, updateUser } = useAuth();
 
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [name, setName] = useState(user?.name || "");
+  const [phone, setPhone] = useState(user?.phone || "");
+  const [address, setAddress] = useState(user?.address || "");
   const [instructions, setInstructions] = useState("");
   const [gpsLink, setGpsLink] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("COD");
@@ -138,6 +140,7 @@ function Checkout() {
                 razorpay_order_id: response.razorpay_order_id
               }).eq("id", orderId);
               
+              updateUser({ name, phone, address });
               clear();
               setIsSuccess(true);
             } else {
@@ -218,6 +221,7 @@ function Checkout() {
       if (paymentMethod === "ONLINE") {
         await handleOnlinePayment(orderId);
       } else {
+        updateUser({ name, phone, address });
         clear();
         setIsSuccess(true);
         setIsSubmitting(false);

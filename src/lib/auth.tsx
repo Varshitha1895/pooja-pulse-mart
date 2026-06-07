@@ -4,6 +4,7 @@ interface User {
   name: string;
   phone: string;
   avatar_url?: string;
+  address?: string;
 }
 
 interface AuthContextType {

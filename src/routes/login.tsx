@@ -14,7 +14,7 @@ function Login() {
 
   // Redirect if already logged in
   if (user) {
-    navigate({ to: "/profile" });
+    navigate({ to: "/" });
     return null;
   }
 
@@ -22,7 +22,7 @@ function Login() {
     e.preventDefault();
     if (name.trim() && phone.trim()) {
       login(name, phone);
-      navigate({ to: "/profile" });
+      navigate({ to: "/" });
     }
   };
 
