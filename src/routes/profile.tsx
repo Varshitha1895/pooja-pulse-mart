@@ -25,10 +25,21 @@ import { supabase } from "@/lib/supabase";
 function OrderTracker({ order }: { order: any }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [timeLeft, setTimeLeft] = useState<{ hours: number; minutes: number; seconds: number } | null>(null);
-  const [rating, setRating] = useState(order.rating || 0);
-  const [feedback, setFeedback] = useState(order.feedback || "");
+  // Extract rating and feedback if they are stored inside delivery_instructions
+  let initialRating = order.rating || 0;
+  let initialFeedback = order.feedback || "";
+  if (order.delivery_instructions && order.delivery_instructions.includes("||REVIEW||")) {
+    const match = order.delivery_instructions.match(/\|\|REVIEW\|\|(\d+)\|\|(.*)/);
+    if (match) {
+      initialRating = parseInt(match[1], 10);
+      initialFeedback = match[2];
+    }
+  }
+
+  const [rating, setRating] = useState(initialRating);
+  const [feedback, setFeedback] = useState(initialFeedback);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(!!order.rating);
+  const [isSubmitted, setIsSubmitted] = useState(!!initialRating);
 
   useEffect(() => {
     if (order.status === "Delivered" || order.status === "Cancelled") return;
@@ -64,8 +75,17 @@ function OrderTracker({ order }: { order: any }) {
     }
     setIsSubmitting(true);
     try {
-      // Attempt to save to Supabase. If columns don't exist, this will fail gracefully.
-      await supabase.from("orders").update({ rating, feedback }).eq("id", order.id);
+      // Fetch current order to get existing delivery_instructions
+      const { data: currentOrder } = await supabase.from('orders').select('delivery_instructions').eq('id', order.id).single();
+      const currentInst = currentOrder?.delivery_instructions || '';
+      
+      const reviewPayload = `||REVIEW||${rating}||${feedback}`;
+      const newInst = currentInst.includes('||REVIEW||') 
+        ? currentInst.replace(/\|\|REVIEW\|\|.*/, reviewPayload) 
+        : currentInst + (currentInst ? " " : "") + reviewPayload;
+
+      // Update delivery_instructions since rating/feedback columns don't exist
+      await supabase.from("orders").update({ delivery_instructions: newInst }).eq("id", order.id);
     } catch (error) {
       console.error(error);
     }

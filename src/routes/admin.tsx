@@ -352,11 +352,25 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
                 ) : (
                   orders.map((order) => {
                     // Try to fetch rating from order directly (if Supabase supports it later) 
-                    // or from our local demo storage
+                    // or from our new delivery_instructions payload trick
+                    let dbRating = order.rating || 0;
+                    let dbFeedback = order.feedback || "";
+                    let cleanInstructions = order.delivery_instructions;
+                    
+                    if (order.delivery_instructions && order.delivery_instructions.includes("||REVIEW||")) {
+                      const match = order.delivery_instructions.match(/\|\|REVIEW\|\|(\d+)\|\|(.*)/);
+                      if (match) {
+                        dbRating = parseInt(match[1], 10);
+                        dbFeedback = match[2];
+                        cleanInstructions = order.delivery_instructions.split("||REVIEW||")[0].trim();
+                      }
+                    }
+
+                    // or from our local demo storage fallback
                     const localReviews = JSON.parse(localStorage.getItem('dp_reviews') || '[]');
                     const matchingReview = localReviews.find((r: any) => r.orderId === order.id);
-                    const finalRating = order.rating || matchingReview?.rating;
-                    const finalFeedback = order.feedback || matchingReview?.feedback;
+                    const finalRating = dbRating || matchingReview?.rating;
+                    const finalFeedback = dbFeedback || matchingReview?.feedback;
 
                     return (
                     <tr key={order.id} className="hover:bg-secondary/10 transition group">
@@ -384,10 +398,10 @@ function AdminDashboard({ onSignOut }: { onSignOut: () => void }) {
                           <MapPin className="w-3.5 h-3.5 mr-1.5 mt-0.5 flex-shrink-0" />
                           <span className="line-clamp-2" title={order.address}>{order.address}</span>
                         </div>
-                        {order.delivery_instructions && (
+                        {cleanInstructions && (
                           <div className="mt-2 bg-yellow-50 text-yellow-800 p-2.5 rounded-md border border-yellow-200 text-sm">
                             <strong className="block mb-1 text-yellow-900">Delivery Instructions / Location:</strong>
-                            {renderInstructions(order.delivery_instructions)}
+                            {renderInstructions(cleanInstructions)}
                           </div>
                         )}
                         {finalRating && (

@@ -75,13 +75,24 @@ function Home() {
       try {
         const { data, error } = await supabase
           .from('orders')
-          .select('customer_name, rating, feedback, created_at')
-          .not('rating', 'is', null)
+          .select('customer_name, delivery_instructions, created_at')
+          .like('delivery_instructions', '%||REVIEW||%')
           .order('created_at', { ascending: false })
-          .limit(6);
+          .limit(10);
           
         if (!error && data) {
-          dbReviews = data;
+          dbReviews = data.map((order: any) => {
+             const match = (order.delivery_instructions || '').match(/\|\|REVIEW\|\|(\d+)\|\|(.*)/);
+             if (match) {
+                return {
+                  customer_name: order.customer_name || "Guest",
+                  rating: parseInt(match[1], 10),
+                  feedback: match[2],
+                  created_at: order.created_at
+                }
+             }
+             return null;
+          }).filter(Boolean);
         }
       } catch (err) {}
       
