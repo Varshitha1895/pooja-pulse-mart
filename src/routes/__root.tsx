@@ -14,7 +14,7 @@ import { ChatWidget } from "@/components/site/ChatWidget";
 import { SpiritualCursor } from "@/components/site/SpiritualCursor";
 import { DivineScrollBackground } from "@/components/site/DivineScrollBackground";
 import { CartProvider } from "@/lib/cart";
-import { AuthProvider } from "@/lib/auth";
+import { AuthProvider, useAuth } from "@/lib/auth";
 
 function NotFoundComponent() {
   return (
