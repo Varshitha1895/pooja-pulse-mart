@@ -82,12 +82,20 @@ function Checkout() {
         <p className="text-muted-foreground max-w-md mb-8">
           Thank you for shopping with Divine Hub. Your order has been received and is being processed.
         </p>
-        <Link
-          to="/"
-          className="bg-primary text-primary-foreground px-6 py-3 rounded-md font-semibold hover:bg-primary/90 transition"
-        >
-          Return to Home
-        </Link>
+        <div className="flex gap-4">
+          <Link
+            to="/profile"
+            className="bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:bg-primary/90 transition shadow-warm"
+          >
+            Track Your Order
+          </Link>
+          <Link
+            to="/"
+            className="bg-secondary text-secondary-foreground border border-border px-6 py-3 rounded-xl font-semibold hover:bg-secondary/80 transition"
+          >
+            Return Home
+          </Link>
+        </div>
       </div>
     );
   }
