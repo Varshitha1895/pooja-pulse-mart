@@ -71,6 +71,9 @@ import { WholesaleCartProvider } from "@/lib/wholesale-cart";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useRouter().state.location;
+  const isHome = location.pathname === "/";
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -79,7 +82,7 @@ function RootComponent() {
             <DivineScrollBackground />
             <div className="min-h-screen flex flex-col relative z-0">
               <Navbar />
-              <main className="flex-1">
+              <main className={`flex-1 ${!isHome ? 'pt-16 md:pt-20' : ''}`}>
                 <Outlet />
               </main>
               <Footer />
