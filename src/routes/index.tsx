@@ -27,6 +27,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const scroller = useRef<HTMLDivElement>(null);
   const [featured, setFeatured] = useState<Product[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -69,7 +70,24 @@ function Home() {
       }
     }
     
+    async function fetchReviews() {
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('customer_name, rating, feedback, created_at')
+          .not('rating', 'is', null)
+          .order('created_at', { ascending: false })
+          .limit(6);
+          
+        if (!error && data) {
+          // Filter out empty feedbacks just to keep the section looking good
+          setReviews(data.filter(r => r.feedback && r.feedback.trim() !== ""));
+        }
+      } catch (err) {}
+    }
+
     fetchProducts();
+    fetchReviews();
   }, []);
 
   // Force scroll to start when products load to prevent any browser snap/anchor glitches
@@ -307,6 +325,38 @@ function Home() {
           View All <ChevronRight className="h-4 w-4" />
         </Link>
         </section>
+
+        {/* CUSTOMER REVIEWS SECTION */}
+        {reviews.length > 0 && (
+          <section className="relative mx-auto max-w-7xl px-4 md:px-8 pb-24 z-10">
+            <div className="text-center mb-12">
+              <p className="text-accent uppercase tracking-[0.3em] text-xs font-bold mb-2">
+                Testimonials
+              </p>
+              <h2 className="text-display text-4xl md:text-5xl font-bold">
+                What Our Devotees Say
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {reviews.map((review, idx) => (
+                <div key={idx} className="bg-card/90 backdrop-blur border border-border p-6 rounded-2xl shadow-sm hover:shadow-md transition">
+                  <div className="flex gap-1 mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span key={star} className={`text-xl ${star <= review.rating ? "text-yellow-500" : "text-gray-300"}`}>★</span>
+                    ))}
+                  </div>
+                  <p className="italic text-muted-foreground mb-6">"{review.feedback}"</p>
+                  <div className="flex items-center justify-between border-t border-border/50 pt-4 mt-auto">
+                    <span className="font-bold text-foreground capitalize">{review.customer_name}</span>
+                    <span className="text-xs text-muted-foreground">Verified Buyer</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
       </div> {/* END DIVINE MURAL WRAPPER */}
     </>
   );
