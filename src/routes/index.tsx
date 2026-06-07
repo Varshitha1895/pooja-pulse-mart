@@ -357,21 +357,29 @@ function Home() {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {reviews.map((review, idx) => (
-                <div key={idx} className="bg-card/90 backdrop-blur border border-border p-6 rounded-2xl shadow-sm hover:shadow-md transition">
-                  <div className="flex gap-1 mb-4">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <span key={star} className={`text-xl ${star <= review.rating ? "text-yellow-500" : "text-gray-300"}`}>★</span>
-                    ))}
+            {/* SCROLLING MARQUEE */}
+            <div className="relative flex overflow-hidden w-full group pause-marquee mt-8">
+              {/* Fade masks for smooth edges */}
+              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+              
+              <div className="flex w-max animate-marquee space-x-6 pr-6">
+                {/* Duplicate the reviews array multiple times to ensure the marquee is wide enough to loop seamlessly */}
+                {[...reviews, ...reviews, ...reviews, ...reviews].map((review, idx) => (
+                  <div key={idx} className="bg-card/90 backdrop-blur border border-border p-8 rounded-2xl shadow-sm hover:shadow-md transition w-[350px] shrink-0 flex flex-col">
+                    <div className="flex gap-1 mb-4">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span key={star} className={`text-xl ${star <= review.rating ? "text-yellow-500" : "text-gray-300"}`}>★</span>
+                      ))}
+                    </div>
+                    <p className="italic text-muted-foreground mb-6 line-clamp-3">"{review.feedback}"</p>
+                    <div className="flex items-center justify-between border-t border-border/50 pt-4 mt-auto">
+                      <span className="font-bold text-foreground capitalize">{review.customer_name}</span>
+                      <span className="text-xs text-muted-foreground">Verified Buyer</span>
+                    </div>
                   </div>
-                  <p className="italic text-muted-foreground mb-6">"{review.feedback}"</p>
-                  <div className="flex items-center justify-between border-t border-border/50 pt-4 mt-auto">
-                    <span className="font-bold text-foreground capitalize">{review.customer_name}</span>
-                    <span className="text-xs text-muted-foreground">Verified Buyer</span>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
         )}
