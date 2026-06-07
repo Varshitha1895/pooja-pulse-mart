@@ -68,10 +68,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 
 import { WholesaleCartProvider } from "@/lib/wholesale-cart";
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "@tanstack/react-router";
+
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!user && location.pathname !== '/login') {
+      navigate({ to: '/login' });
+    }
+  }, [user, location.pathname, navigate]);
+
+  if (!user && location.pathname !== '/login') {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
+}
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const location = useRouter().state.location;
+  const routerState = useRouter().state;
+  const location = routerState.location;
   const isHome = location.pathname === "/";
 
   return (
@@ -79,16 +104,18 @@ function RootComponent() {
       <AuthProvider>
         <CartProvider>
           <WholesaleCartProvider>
-            <DivineScrollBackground />
-            <div className="min-h-screen flex flex-col relative z-0">
-              <Navbar />
-              <main className={`flex-1 ${!isHome ? 'pt-16 md:pt-20' : ''}`}>
-                <Outlet />
-              </main>
-              <Footer />
-              <ChatWidget />
-              <SpiritualCursor />
-            </div>
+            <AuthGuard>
+              <DivineScrollBackground />
+              <div className="min-h-screen flex flex-col relative z-0">
+                <Navbar />
+                <main className={`flex-1 ${!isHome && location.pathname !== '/login' ? 'pt-16 md:pt-20' : ''}`}>
+                  <Outlet />
+                </main>
+                <Footer />
+                <ChatWidget />
+                <SpiritualCursor />
+              </div>
+            </AuthGuard>
           </WholesaleCartProvider>
         </CartProvider>
       </AuthProvider>
